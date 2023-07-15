@@ -11,7 +11,12 @@
         <maven.compiler.target>11</maven.compiler.target>
         <exec.mainClass>com.ufes.acessousuarios.Main</exec.mainClass>
     </properties>
-
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
     <dependencies>
     <!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
         <dependency>
@@ -19,7 +24,6 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.42.0.0</version>
         </dependency>
-        
         <!-- https://mvnrepository.com/artifact/io.github.cdimascio/java-dotenv -->
         <dependency>
             <groupId>io.github.cdimascio</groupId>
@@ -28,9 +32,9 @@
         </dependency>
         <!-- https://github.com/claytonfraga/validadorsenha -->
         <dependency>
-            <groupId>com.pss.senha.validacao</groupId>
+            <groupId>com.github.claytonfraga</groupId>
             <artifactId>ValidadorSenha</artifactId>
-            <version>1.08-SNAPSHOT</version>
+            <version>master-c949bd44ba-1</version>
         </dependency>
     </dependencies>
 

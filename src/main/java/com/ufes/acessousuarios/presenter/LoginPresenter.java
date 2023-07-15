@@ -25,7 +25,7 @@ public class LoginPresenter {
                 this.entrar();
                 JOptionPane.showMessageDialog(view, "Login efetuado com sucesso!");
             } catch(Exception ex){
-                JOptionPane.showMessageDialog(view, "Usuário não encontrado ou senha inválida!");
+                JOptionPane.showMessageDialog(view, "Usuário não encontrado ou senha inválida!" + ex);
             }
         });
     }

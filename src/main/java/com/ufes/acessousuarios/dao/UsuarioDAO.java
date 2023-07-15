@@ -47,14 +47,9 @@ public class UsuarioDAO implements IUsuarioDAO {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        var sql = "SELECT"
-                + "id,"
-                + "nome,"
-                + "admin,"
-                + "data_criacao"
-                + "FROM usuario"
-                + "WHERE login = ?"
-                + "AND senha = ?";
+        var sql = "SELECT id, nome, admin, data_criacao FROM Usuario "
+                + "WHERE login = ? "
+                + "AND senha = ?;";
         try {
             con = SQLite.getConnection();
             ps = con.prepareStatement(sql);
@@ -80,7 +75,7 @@ public class UsuarioDAO implements IUsuarioDAO {
     public void atualizarSenha(Usuario usuario) throws RuntimeException {
        Connection con = null;
        PreparedStatement ps = null;
-       var sql = "UPDATE USUARIO "
+       var sql = "UPDATE Usuario "
                    + "SET senha = ?"
                    + "WHERE id = ?";
        try {
@@ -100,7 +95,7 @@ public class UsuarioDAO implements IUsuarioDAO {
     public void criar(Usuario usuario) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
-        var sql = "INSERT INTO USUARIO(nome, login, senha, admin, data_criacao)"
+        var sql = "INSERT INTO Usuario(nome, login, senha, admin, data_criacao)"
                 + "VALUES (?, ? ,? , ?, ?);";
         try {
             con = SQLite.getConnection();
@@ -167,7 +162,7 @@ public class UsuarioDAO implements IUsuarioDAO {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        var sql = "SELECT * FROM USUARIO WHERE id = ?";
+        var sql = "SELECT * FROM Usuario WHERE id = ?";
         try {
             con = SQLite.getConnection();
             ps = con.prepareStatement(sql);
@@ -197,7 +192,7 @@ public class UsuarioDAO implements IUsuarioDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
         List<Usuario> usuarios = new ArrayList<>();
-        var sql = "SELECT * FROM USUARIO WHERE id = ?";
+        var sql = "SELECT * FROM Usuario WHERE id = ?";
         try {
             con = SQLite.getConnection();
             ps = con.prepareStatement(sql);
@@ -231,7 +226,7 @@ public class UsuarioDAO implements IUsuarioDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
         List<Usuario> usuarios = new ArrayList<>();
-        var sql = "SELECT * FROM USUARIO";
+        var sql = "SELECT * FROM Usuario";
         try {
             con = SQLite.getConnection();
             ps = con.prepareStatement(sql);
