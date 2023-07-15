@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -100,7 +101,7 @@ public class UsuarioDAO implements IUsuarioDAO {
         Connection con = null;
         PreparedStatement ps = null;
         var sql = "INSERT INTO USUARIO(nome, login, senha, admin, data_criacao)"
-                + "VALUES (?, ? ,? , ?, date('now'));";
+                + "VALUES (?, ? ,? , ?, ?);";
         try {
             con = SQLite.getConnection();
             ps = con.prepareStatement(sql);
@@ -108,6 +109,7 @@ public class UsuarioDAO implements IUsuarioDAO {
             ps.setString(2, usuario.getLogin());
             ps.setString(3, usuario.getSenha());
             ps.setBoolean(4, usuario.isAdmin());
+            ps.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
             ps.executeUpdate();
             ps.close();
         } catch (SQLException ex) {
