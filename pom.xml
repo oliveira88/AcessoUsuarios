@@ -11,4 +11,27 @@
         <maven.compiler.target>11</maven.compiler.target>
         <exec.mainClass>com.ufes.acessousuarios.Main</exec.mainClass>
     </properties>
+
+    <dependencies>
+    <!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.42.0.0</version>
+        </dependency>
+        
+        <!-- https://mvnrepository.com/artifact/io.github.cdimascio/java-dotenv -->
+        <dependency>
+            <groupId>io.github.cdimascio</groupId>
+            <artifactId>java-dotenv</artifactId>
+            <version>5.2.2</version>
+        </dependency>
+        <!-- https://github.com/claytonfraga/validadorsenha -->
+        <dependency>
+            <groupId>com.pss.senha.validacao</groupId>
+            <artifactId>ValidadorSenha</artifactId>
+            <version>1.08-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
 </project>
