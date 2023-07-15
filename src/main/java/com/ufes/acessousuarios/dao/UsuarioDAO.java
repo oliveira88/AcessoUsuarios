@@ -27,6 +27,7 @@ public class UsuarioDAO implements IUsuarioDAO {
                 + "login VARCHAR(50) NOT NULL UNIQUE,"
                 + "senha VARCHAR(100) NOT NULL,"
                 + "admin BOOLEAN DEFAULT false NOT NULL,"
+                + "ativo BOOLEAN DEFAULT false NOT NULL,"
                 + "data_criacao DATE NOT NULL,"
                 + "data_exclusao DATE);";
         try {
