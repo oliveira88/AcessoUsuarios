@@ -12,24 +12,20 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsuarioDAO implements IUsuarioDAO {
+public class NotificacaoDAO implements INotificacaoDAO {
 
-    public UsuarioDAO() {
-        criarTabelaUsuario();
+    public NotificacaoDAO() {
+        criarTabelaNotificacao();
     }
     
-    private void criarTabelaUsuario(){
+    private void criarTabelaNotificacao(){
         Connection con = null;
         Statement st = null;
-        var sql = "CREATE TABLE IF NOT EXISTS Usuario("
+        var sql = "CREATE TABLE IF NOT EXISTS Notificacao("
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + "nome VARCHAR(100) NOT NULL,"
-                + "login VARCHAR(50) NOT NULL UNIQUE,"
-                + "senha VARCHAR(100) NOT NULL,"
-                + "admin BOOLEAN DEFAULT false NOT NULL,"
-                + "ativo BOOLEAN DEFAULT false NOT NULL,"
-                + "data_criacao DATE NOT NULL,"
-                + "data_exclusao DATE);";
+                + "titulo VARCHAR(200) NOT NULL,"
+                + "mensagem VARCHAR(300) NOT NULL UNIQUE"
+                + " );";
         try {
             con = SQLite.getConnection();
             st = con.createStatement();
@@ -138,9 +134,9 @@ public class UsuarioDAO implements IUsuarioDAO {
        PreparedStatement ps = null;
         var sql = "UPDATE Usuario "
                 + "SET login = ?,"
-                + " senha = ?,"
-                + " nome = ?,"
-                + " admin = ?"
+                + "SET senha = ?,"
+                + "SET nome = ?,"
+                + "SET admin = ?,"
                 + "WHERE id = ?";
        try {
             con = SQLite.getConnection();
@@ -159,7 +155,7 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public Usuario obterPorId(Long id) throws RuntimeException {
+    public Usuario obterPorId(long id) throws RuntimeException {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -174,9 +170,9 @@ public class UsuarioDAO implements IUsuarioDAO {
                 throw new RuntimeException("Usuário não encontrado.\n");
             }
             Long id_result = rs.getLong(1);
-            String nome = rs.getString(3);
-            String login = rs.getString(4);
-            String senha = rs.getString(2);
+            String nome = rs.getString(2);
+            String login = rs.getString(3);
+            String senha = rs.getString(4);
             boolean isAdmin = rs.getBoolean(5);
             LocalDateTime dataCriacao = rs.getTimestamp(6).toLocalDateTime();
             return new Usuario(id_result, nome, login, senha, isAdmin, dataCriacao);
@@ -211,7 +207,6 @@ public class UsuarioDAO implements IUsuarioDAO {
                 boolean isAdmin = rs.getBoolean(5);
                 LocalDateTime dataCriacao = rs.getTimestamp(6).toLocalDateTime();
                 usuarios.add(new Usuario(id, nome_result, login, senha, isAdmin, dataCriacao));
-                System.out.println(new Usuario(id, nome_result, login, senha, isAdmin, dataCriacao));
             } while(rs.next());
             
             return usuarios;
@@ -236,9 +231,9 @@ public class UsuarioDAO implements IUsuarioDAO {
             
             while(rs.next()) {
                 Long id = rs.getLong(1);
-                String nome_result = rs.getString(3);
-                String login = rs.getString(4);
-                String senha = rs.getString(2);
+                String nome_result = rs.getString(2);
+                String login = rs.getString(3);
+                String senha = rs.getString(4);
                 boolean isAdmin = rs.getBoolean(5);
                 LocalDateTime dataCriacao = rs.getTimestamp(6).toLocalDateTime();
                 usuarios.add(new Usuario(id, nome_result, login, senha, isAdmin, dataCriacao));
@@ -256,6 +251,5 @@ public class UsuarioDAO implements IUsuarioDAO {
     public void autorizarUsuario(long id) throws RuntimeException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
-    
+       
 }

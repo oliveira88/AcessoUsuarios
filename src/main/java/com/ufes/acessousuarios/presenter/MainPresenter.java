@@ -1,29 +1,38 @@
 package com.ufes.acessousuarios.presenter;
 
+import com.ufes.acessousuarios.model.Usuario;
+import com.ufes.acessousuarios.observer.IObserverLogin;
 import com.ufes.acessousuarios.service.UsuarioService;
+import com.ufes.acessousuarios.service.UsuarioServiceFactory;
+import com.ufes.acessousuarios.state.main.AdministradorState;
 import com.ufes.acessousuarios.state.main.MainPresenterState;
 import com.ufes.acessousuarios.state.main.NaoLogadoState;
+import com.ufes.acessousuarios.state.manterusuario.EditarSenhaUsuarioState;
+import com.ufes.acessousuarios.state.manterusuario.EditarUsuarioState;
+import com.ufes.acessousuarios.state.manterusuario.IncluirUsuarioState;
+import com.ufes.acessousuarios.state.manterusuario.VisualizarUsuarioState;
 import com.ufes.acessousuarios.view.MainView;
 import java.awt.Component;
 import javax.swing.JOptionPane;
 
-public class MainPresenter {
+public class MainPresenter implements IObserverLogin{
     private final MainView view;
     private MainPresenterState state;
     private final UsuarioService usuarioService;
+    private ManterUsuarioPresenter manterPresenter; 
+    private Usuario usuario;
+    //TODO: Lembrar de instanicar as daos nas sua servoce
+    
     public MainPresenter() {
         this.view = new MainView();
-        this.usuarioService = UsuarioService.getInstancia();
+        this.usuarioService = UsuarioServiceFactory.getInstance().getService();
         this.configMenus();
         this.setState(new NaoLogadoState(this));
-        if(this.usuarioService.getUsuarios().isEmpty()) {
-            new ManterUsuarioPresenter(this);
-        } else {
-            new LoginPresenter(this);
-        }
+        
+        this.initComponente();
         this.view.setVisible(true);
     }
-
+    
     public MainView getView() {
         return view;
     }
@@ -42,11 +51,11 @@ public class MainPresenter {
     
     public void configMenus() {
         this.view.getMenuBuscar().addActionListener((e) -> {
-            System.out.println("Abrir buscar");
-            showDialog("Abrir buscar");
+              new BuscarUsuariosPresenter(this);
         });
         this.view.getMenuCadastrar().addActionListener((e) -> {
-            showDialog("Abrir cadastrar");
+            manterPresenter = new ManterUsuarioPresenter(this);
+             manterPresenter.setState(new IncluirUsuarioState(manterPresenter, usuario));
         });
         this.view.getMenuLog().addActionListener((e) -> {
             showDialog("Abrir log");
@@ -56,4 +65,22 @@ public class MainPresenter {
     private void showDialog(String message) {
         JOptionPane.showMessageDialog(getView(), message, "Primeiro Acesso!", JOptionPane.INFORMATION_MESSAGE);
     }
+        
+    private void initComponente(){
+        if(this.usuarioService.getUsuarios().isEmpty()) {
+            manterPresenter = new ManterUsuarioPresenter(this);
+            manterPresenter.setState(new IncluirUsuarioState(manterPresenter, usuario));
+        } else {
+            new LoginPresenter(this);
+        }
+    }
+    
+    @Override
+    public void update(Usuario usuario) {
+        if(usuario.isAdmin()){
+            this.setState(new AdministradorState(this));
+        }
+    }
+ 
+
 }

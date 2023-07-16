@@ -7,17 +7,13 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class IncluirUsuarioCommand extends ManterUsuarioCommand {
-    public IncluirUsuarioCommand(UsuarioService service, Usuario usuario) {
+public class EditarUsuarioCommand extends ManterUsuarioCommand {
+    public EditarUsuarioCommand(UsuarioService service, Usuario usuario) {
         super(service, usuario);
     }
 
     @Override
     public void executar() {
-        try {
-            this.service.criarUsuario(usuario);
-        } catch (SQLException ex) {
-            Logger.getLogger(IncluirUsuarioCommand.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.service.atualizar(usuario);
     }
 }

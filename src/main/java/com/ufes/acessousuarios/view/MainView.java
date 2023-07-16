@@ -1,9 +1,12 @@
 package com.ufes.acessousuarios.view;
 
+import javax.swing.JButton;
 import javax.swing.JDesktopPane;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 
 public class MainView extends javax.swing.JFrame {
 
@@ -25,6 +28,12 @@ public class MainView extends javax.swing.JFrame {
     private void initComponents() {
 
         desktopPane = new javax.swing.JDesktopPane();
+        jPanel1 = new javax.swing.JPanel();
+        btnNotificacoes = new javax.swing.JButton();
+        jLabelUsuario = new javax.swing.JLabel();
+        jLabelTipo = new javax.swing.JLabel();
+        nameUsuario = new javax.swing.JLabel();
+        tipoUsuario = new javax.swing.JLabel();
         barraMenu = new javax.swing.JMenuBar();
         menuUsuarios = new javax.swing.JMenu();
         menuBuscar = new javax.swing.JMenuItem();
@@ -35,15 +44,63 @@ public class MainView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        btnNotificacoes.setText("Notificações");
+
+        jLabelUsuario.setText("Usuario : ");
+
+        jLabelTipo.setText("Tipo :");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabelTipo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tipoUsuario)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 220, Short.MAX_VALUE)
+                        .addComponent(btnNotificacoes, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabelUsuario)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(nameUsuario)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(52, 52, 52)
+                .addComponent(btnNotificacoes)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelUsuario)
+                    .addComponent(nameUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelTipo)
+                    .addComponent(tipoUsuario))
+                .addGap(24, 24, 24))
+        );
+
+        desktopPane.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         javax.swing.GroupLayout desktopPaneLayout = new javax.swing.GroupLayout(desktopPane);
         desktopPane.setLayout(desktopPaneLayout);
         desktopPaneLayout.setHorizontalGroup(
             desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         desktopPaneLayout.setVerticalGroup(
             desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 277, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, desktopPaneLayout.createSequentialGroup()
+                .addGap(0, 187, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         menuUsuarios.setText("Usuários");
@@ -114,15 +171,57 @@ public class MainView extends javax.swing.JFrame {
         return menuUsuarios;
     }
 
+    public JButton getBtnNotificacoes() {
+        return btnNotificacoes;
+    }
+
+    public void setBtnNotificacoes(JButton btnNotificacoes) {
+        this.btnNotificacoes = btnNotificacoes;
+    }
+
+    public JLabel getNameUsuario() {
+        return nameUsuario;
+    }
+
+    public void setNameUsuario(JLabel nameUsuario) {
+        this.nameUsuario = nameUsuario;
+    }
+
+    public JLabel getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public void setTipoUsuario(JLabel tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
+    }
+
+    public JLabel getjLabelTipo() {
+        return jLabelTipo;
+    }
+
+    public JLabel getjLabelUsuario() {
+        return jLabelUsuario;
+    }
+
+    public JPanel getjPanel1() {
+        return jPanel1;
+    }
+    
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barraMenu;
+    private javax.swing.JButton btnNotificacoes;
     private javax.swing.JDesktopPane desktopPane;
+    private javax.swing.JLabel jLabelTipo;
+    private javax.swing.JLabel jLabelUsuario;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JMenuItem menuBuscar;
     private javax.swing.JMenuItem menuCadastrar;
     private javax.swing.JMenuItem menuLog;
     private javax.swing.JMenu menuOpcoes;
     private javax.swing.JMenuItem menuSair;
     private javax.swing.JMenu menuUsuarios;
+    private javax.swing.JLabel nameUsuario;
+    private javax.swing.JLabel tipoUsuario;
     // End of variables declaration//GEN-END:variables
 }

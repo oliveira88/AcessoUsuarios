@@ -1,15 +1,16 @@
 package com.ufes.acessousuarios.state.manterusuario;
 
+import com.ufes.acessousuarios.model.Usuario;
 import com.ufes.acessousuarios.presenter.ManterUsuarioPresenter;
 import com.ufes.acessousuarios.view.ManterUsuarioView;
 
 public abstract class ManterUsuarioState {
     protected ManterUsuarioPresenter presenter;
-    protected ManterUsuarioView view;
+    protected Usuario usuario;
 
-    public ManterUsuarioState(ManterUsuarioPresenter presenter) {
+    public ManterUsuarioState(ManterUsuarioPresenter presenter, Usuario usuario) {
         this.presenter = presenter;
-        this.view = this.presenter.getView();
+        this.usuario = usuario;
     }
 
     public void salvar() {
@@ -22,6 +23,6 @@ public abstract class ManterUsuarioState {
         throw new RuntimeException("Não é possível executar excluir.");
     }
     public void cancelar() {
-        throw new RuntimeException("Não é possível executar cancelar.");
+        this.presenter.getView().dispose();
     }
 }
