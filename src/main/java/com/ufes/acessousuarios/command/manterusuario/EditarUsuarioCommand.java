@@ -8,8 +8,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class EditarUsuarioCommand extends ManterUsuarioCommand {
-    public EditarUsuarioCommand(UsuarioService service, Usuario usuario) {
-        super(service, usuario);
+    public EditarUsuarioCommand(Usuario usuario) {
+        super(usuario);
     }
 
     @Override

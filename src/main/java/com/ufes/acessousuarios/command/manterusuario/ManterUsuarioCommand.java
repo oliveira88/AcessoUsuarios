@@ -1,17 +1,17 @@
 package com.ufes.acessousuarios.command.manterusuario;
 
-import com.pss.senha.validacao.ValidadorSenha;
 import com.ufes.acessousuarios.command.ICommand;
 import com.ufes.acessousuarios.model.Usuario;
 import com.ufes.acessousuarios.service.UsuarioService;
+import com.ufes.acessousuarios.service.UsuarioServiceFactory;
 
 public abstract class ManterUsuarioCommand implements ICommand {
-    protected UsuarioService service;
     protected Usuario usuario;
+    protected UsuarioService service;
 
-    public ManterUsuarioCommand(UsuarioService service, Usuario usuario) {
-        this.service = service;
+    public ManterUsuarioCommand(Usuario usuario) {
         this.usuario = usuario;
+        this.service = UsuarioServiceFactory.getInstance().getService();
     }
     
     public abstract void executar();

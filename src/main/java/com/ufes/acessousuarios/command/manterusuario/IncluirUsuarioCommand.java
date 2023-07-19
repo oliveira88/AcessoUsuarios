@@ -8,8 +8,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class IncluirUsuarioCommand extends ManterUsuarioCommand {
-    public IncluirUsuarioCommand(UsuarioService service, Usuario usuario) {
-        super(service, usuario);
+    public IncluirUsuarioCommand(Usuario usuario) {
+        super(usuario);
     }
 
     @Override
