@@ -5,6 +5,7 @@ import com.ufes.acessousuarios.command.ICommand;
 import com.ufes.acessousuarios.command.manterusuario.IncluirUsuarioCommand;
 import com.ufes.acessousuarios.model.Usuario;
 import com.ufes.acessousuarios.presenter.ManterUsuarioPresenter;
+import com.ufes.acessousuarios.service.UsuarioServiceFactory;
 import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 
@@ -14,15 +15,13 @@ public class IncluirUsuarioState extends ManterUsuarioState {
     public IncluirUsuarioState(ManterUsuarioPresenter presenter, Usuario usuario) {
         super(presenter, usuario);
         registerListeners();
-        initComponents();
     }
-
+    
+    @Override
      public void initComponents(){
+       super.initComponents();
        this.presenter.getView().setTitle("Cadastrar Usuário");
-       this.presenter.getView().getBtnEditar().setVisible(false);
-       this.presenter.getView().getBtnExcluir().setVisible(false);
-       this.presenter.getView().getChkAdmin().setVisible(false);
-       this.presenter.getView().getLblDataCadastro().setVisible(false);
+       this.presenter.getView().getChkAdmin().setVisible(true);
     }
      
     @Override
@@ -32,7 +31,7 @@ public class IncluirUsuarioState extends ManterUsuarioState {
       }
       this.usuario = this.lerFormulario();
       ValidadorSenha.validar(this.usuario.getSenha());
-      command = new IncluirUsuarioCommand(presenter.getUsuarioService(),this.usuario);
+      command = new IncluirUsuarioCommand(this.usuario);
       this.command.executar();
     }
     
@@ -56,10 +55,11 @@ public class IncluirUsuarioState extends ManterUsuarioState {
     }
     
     public Usuario lerFormulario() {
+        boolean isAdmin = UsuarioServiceFactory.getInstance().getService().getUsuarios().isEmpty();
         String login = this.presenter.getView().getTxtLogin().getText();
         String senha = new String(this.presenter.getView().getTxtSenha().getPassword());
         String nome = this.presenter.getView().getTxtNome().getText();
-        usuario = new Usuario(login, senha, nome, true, LocalDateTime.now());
+        usuario = new Usuario(login, senha, nome, isAdmin, LocalDateTime.now());
         return usuario;
     }
     
@@ -71,7 +71,7 @@ public class IncluirUsuarioState extends ManterUsuarioState {
         if(this.presenter.getView().getTxtSenha().getPassword() == null || this.presenter.getView().getTxtSenha().getPassword().length <= 0){
             return false;
         }
-          if(this.presenter.getView().getTxtNome().getText() == null || this.presenter.getView().getTxtNome().getText().isBlank()){
+        if(this.presenter.getView().getTxtNome().getText() == null || this.presenter.getView().getTxtNome().getText().isBlank()){
             return false;
         }
        return true;

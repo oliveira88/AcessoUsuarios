@@ -14,6 +14,7 @@ public abstract class MainPresenterState {
     public MainPresenterState(MainPresenter mainPresenter) {
         this.presenter = mainPresenter;
         this.view = this.presenter.getView();
+        this.initComponentes();
     }
     
     public void cadastrarUsuario() {
@@ -26,8 +27,12 @@ public abstract class MainPresenterState {
         throw new RuntimeException("Não é possível fazer o logout.");
     }
     public void configurarLog() {
-        throw new RuntimeException("Não é possível a configuração de log.");
+        throw new RuntimeException("Não é possível executar a configuração de log.");
     }
+    public void buscarNotificacoes() {
+        throw new RuntimeException("Não é possível executar a busca de notificações.");
+    }
+
     public void initComponentes() {
         this.view.getjLabelTipo().setVisible(false);
         this.view.getjPanel1().setVisible(false);

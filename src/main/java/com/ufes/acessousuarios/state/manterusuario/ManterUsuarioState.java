@@ -11,6 +11,7 @@ public abstract class ManterUsuarioState {
     public ManterUsuarioState(ManterUsuarioPresenter presenter, Usuario usuario) {
         this.presenter = presenter;
         this.usuario = usuario;
+        this.initComponents();
     }
 
     public void salvar() {
@@ -24,5 +25,12 @@ public abstract class ManterUsuarioState {
     }
     public void cancelar() {
         this.presenter.getView().dispose();
+    }
+    
+    public void initComponents() {
+       this.presenter.getView().getBtnEditar().setVisible(false);
+       this.presenter.getView().getBtnExcluir().setVisible(false);
+       this.presenter.getView().getChkAdmin().setVisible(false);
+       this.presenter.getView().getLblDataCadastro().setVisible(false);
     }
 }

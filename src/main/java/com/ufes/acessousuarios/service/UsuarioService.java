@@ -3,12 +3,12 @@ package com.ufes.acessousuarios.service;
 
 import com.ufes.acessousuarios.dao.IUsuarioDAO;
 import com.ufes.acessousuarios.model.Usuario;
-import com.ufes.acessousuarios.observer.ObservableLogin;
+import com.ufes.acessousuarios.observer.Observable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsuarioService extends ObservableLogin {
+public class UsuarioService extends Observable {
     private static UsuarioService instancia;
     private Usuario usuarioLogado;
     private IUsuarioDAO usuarioDAO;

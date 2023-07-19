@@ -1,10 +1,8 @@
 package com.ufes.acessousuarios.presenter;
 
 import com.ufes.acessousuarios.model.Usuario;
-import com.ufes.acessousuarios.observer.IObserverLogin;
 import com.ufes.acessousuarios.service.UsuarioService;
 import com.ufes.acessousuarios.service.UsuarioServiceFactory;
-import com.ufes.acessousuarios.state.main.AdministradorState;
 import com.ufes.acessousuarios.state.main.MainPresenterState;
 import com.ufes.acessousuarios.state.main.NaoLogadoState;
 import com.ufes.acessousuarios.state.manterusuario.EditarSenhaUsuarioState;
@@ -14,18 +12,18 @@ import com.ufes.acessousuarios.state.manterusuario.VisualizarUsuarioState;
 import com.ufes.acessousuarios.view.MainView;
 import java.awt.Component;
 import javax.swing.JOptionPane;
+import com.ufes.acessousuarios.observer.IObserver;
 
-public class MainPresenter implements IObserverLogin{
+public final class MainPresenter implements IObserver {
     private final MainView view;
     private MainPresenterState state;
     private final UsuarioService usuarioService;
-    private ManterUsuarioPresenter manterPresenter; 
-    private Usuario usuario;
     //TODO: Lembrar de instanicar as daos nas sua servoce
     
     public MainPresenter() {
         this.view = new MainView();
         this.usuarioService = UsuarioServiceFactory.getInstance().getService();
+        this.usuarioService.addObserver(this);
         this.configMenus();
         this.setState(new NaoLogadoState(this));
         
@@ -33,6 +31,39 @@ public class MainPresenter implements IObserverLogin{
         this.view.setVisible(true);
     }
     
+    private void initComponente(){
+        if(this.usuarioService.getUsuarios().isEmpty()) {
+            new ManterUsuarioPresenter(this);
+        } else {
+            new LoginPresenter(this);
+        }
+    }
+    
+    public void addDesktopPane(Component component) {
+        this.view.getDesktopPane().add(component);
+    }
+    
+    public void configMenus() {
+        this.view.getMenuBuscar().addActionListener((e) -> {
+              this.state.buscarUsuarios();
+        });
+        this.view.getMenuCadastrar().addActionListener((e) -> {
+            this.state.cadastrarUsuario();
+        });
+        this.view.getMenuLog().addActionListener((e) -> {
+            this.state.configurarLog();
+            showDialog("Abrir log");
+        });
+        this.view.getMenuSair().addActionListener((e) -> {
+            this.state.logout();
+            showDialog("Deslogar");
+        });
+    }
+    
+    private void showDialog(String message) {
+        JOptionPane.showMessageDialog(getView(), message, "TODO!", JOptionPane.INFORMATION_MESSAGE);
+    }
+        
     public MainView getView() {
         return view;
     }
@@ -44,43 +75,9 @@ public class MainPresenter implements IObserverLogin{
     public void setState(MainPresenterState state) {
         this.state = state;
     }
-    
-    public void addDesktopPane(Component component) {
-        this.view.getDesktopPane().add(component);
-    }
-    
-    public void configMenus() {
-        this.view.getMenuBuscar().addActionListener((e) -> {
-              new BuscarUsuariosPresenter(this);
-        });
-        this.view.getMenuCadastrar().addActionListener((e) -> {
-            manterPresenter = new ManterUsuarioPresenter(this);
-             manterPresenter.setState(new IncluirUsuarioState(manterPresenter, usuario));
-        });
-        this.view.getMenuLog().addActionListener((e) -> {
-            showDialog("Abrir log");
-        });
-    }
-    
-    private void showDialog(String message) {
-        JOptionPane.showMessageDialog(getView(), message, "Primeiro Acesso!", JOptionPane.INFORMATION_MESSAGE);
-    }
-        
-    private void initComponente(){
-        if(this.usuarioService.getUsuarios().isEmpty()) {
-            manterPresenter = new ManterUsuarioPresenter(this);
-            manterPresenter.setState(new IncluirUsuarioState(manterPresenter, usuario));
-        } else {
-            new LoginPresenter(this);
-        }
-    }
-    
-    @Override
-    public void update(Usuario usuario) {
-        if(usuario.isAdmin()){
-            this.setState(new AdministradorState(this));
-        }
-    }
- 
 
+    @Override
+    public void update() {
+        this.state.buscarNotificacoes();
+    }
 }

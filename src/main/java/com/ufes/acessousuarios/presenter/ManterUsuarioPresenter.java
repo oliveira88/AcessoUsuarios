@@ -2,10 +2,11 @@ package com.ufes.acessousuarios.presenter;
 
 import com.ufes.acessousuarios.service.UsuarioService;
 import com.ufes.acessousuarios.service.UsuarioServiceFactory;
+import com.ufes.acessousuarios.state.manterusuario.IncluirUsuarioState;
 import com.ufes.acessousuarios.state.manterusuario.ManterUsuarioState;
 import com.ufes.acessousuarios.view.ManterUsuarioView;
 
-public class ManterUsuarioPresenter {
+public final class ManterUsuarioPresenter {
     private final ManterUsuarioView view;
     private final MainPresenter mainPresenter;
     private final UsuarioService usuarioService;
@@ -15,6 +16,7 @@ public class ManterUsuarioPresenter {
         this.view = new ManterUsuarioView();
         this.mainPresenter = mainPresenter;
         this.usuarioService = UsuarioServiceFactory.getInstance().getService();
+        setState(new IncluirUsuarioState(this, this.usuarioService.getUsuarioLogado()));
         
         this.registerPane();
         this.view.setVisible(true);
@@ -39,7 +41,4 @@ public class ManterUsuarioPresenter {
     public UsuarioService getUsuarioService() {
         return usuarioService;
     }
-    
-    
-    
 }
