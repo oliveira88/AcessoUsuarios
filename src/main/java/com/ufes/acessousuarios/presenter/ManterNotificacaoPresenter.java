@@ -1,0 +1,56 @@
+package com.ufes.acessousuarios.presenter;
+
+import com.ufes.acessousuarios.model.Notificacao;
+import com.ufes.acessousuarios.model.Usuario;
+import com.ufes.acessousuarios.state.manternotificacao.EnviarNotificacaoState;
+import com.ufes.acessousuarios.state.manternotificacao.ManterNotificacaoState;
+import com.ufes.acessousuarios.state.manternotificacao.VisualizarNotificacaoState;
+import com.ufes.acessousuarios.view.ManterNotificacaoView;
+
+public class ManterNotificacaoPresenter {
+    private final ManterNotificacaoView view;
+    private final MainPresenter mainPresenter;
+    private ManterNotificacaoState state;
+
+    public ManterNotificacaoPresenter(MainPresenter mainPresenter, Usuario destinatario) {
+        this.view = new ManterNotificacaoView();
+        this.mainPresenter = mainPresenter;
+        setState(new EnviarNotificacaoState(this, destinatario));
+        registerPane();
+        configMenus();
+        this.view.setVisible(true);
+    }
+    
+    public ManterNotificacaoPresenter(MainPresenter mainPresenter, Notificacao notificacao) {
+        this.view = new ManterNotificacaoView();
+        this.mainPresenter = mainPresenter;
+        setState(new VisualizarNotificacaoState(this, notificacao));
+        registerPane();
+        configMenus();
+        this.view.setVisible(true);
+    }
+
+    public ManterNotificacaoView getView() {
+        return view;
+    }
+    
+    private void registerPane() {
+        this.mainPresenter.addDesktopPane(view);
+    }
+    
+    public void configMenus() {
+        this.view.getBtnEnviar().addActionListener((e) -> {
+            this.state.enviar();
+        });
+        
+        this.view.getBtnFechar().addActionListener((e) -> {
+            this.state.fechar();
+        });
+    }
+
+    public void setState(ManterNotificacaoState state) {
+        this.state = state;
+    }
+    
+    
+}

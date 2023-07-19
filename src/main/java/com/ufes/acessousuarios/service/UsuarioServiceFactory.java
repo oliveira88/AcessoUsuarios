@@ -8,7 +8,7 @@ import com.ufes.acessousuarios.dao.UsuarioDaoFactory;
 public class UsuarioServiceFactory {
     
     private static UsuarioServiceFactory instancia;
-    private UsuarioService service;
+    private final UsuarioService service;
     private final IUsuarioDAO dao;
     
     private UsuarioServiceFactory(){
@@ -26,7 +26,4 @@ public class UsuarioServiceFactory {
     public UsuarioService getService() {
         return service;
     }
-    
-    
-    
 }

@@ -108,7 +108,7 @@ public class UsuarioDAO implements IUsuarioDAO {
             ps.executeUpdate();
             ps.close();
         } catch (SQLException ex) {
-           throw new RuntimeException("Erro ao atualizar usuário.\n" + ex.getMessage());
+           throw new RuntimeException("Erro ao criar usuário.\n" + ex.getMessage());
         } finally {
             SQLite.closeConnection(con, ps);
         }

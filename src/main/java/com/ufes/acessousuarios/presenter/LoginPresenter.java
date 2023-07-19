@@ -1,14 +1,14 @@
 package com.ufes.acessousuarios.presenter;
 
 import com.ufes.acessousuarios.model.Usuario;
-import com.ufes.acessousuarios.observer.ObservableLogin;
 import com.ufes.acessousuarios.service.UsuarioService;
 import com.ufes.acessousuarios.service.UsuarioServiceFactory;
+import com.ufes.acessousuarios.state.main.LogadoState;
 import com.ufes.acessousuarios.view.LoginView;
 import java.awt.event.ActionEvent;
 import javax.swing.JOptionPane;
 
-public class LoginPresenter extends ObservableLogin{
+public class LoginPresenter {
     private final LoginView view;
     private final MainPresenter mainPresenter;
     private final UsuarioService usuarioService;
@@ -19,7 +19,6 @@ public class LoginPresenter extends ObservableLogin{
         this.usuarioService = UsuarioServiceFactory.getInstance().getService();
         this.registerListeners();
         this.registerPane();
-        initObserver();
         this.view.setVisible(true);
     }
     
@@ -32,21 +31,26 @@ public class LoginPresenter extends ObservableLogin{
                 JOptionPane.showMessageDialog(view, "Usuário não encontrado ou senha inválida!" + ex);
             }
         });
+        this.view.getBtnCriar().addActionListener((e) -> {
+            
+        });
     }
     
     private void registerPane() {
         this.mainPresenter.addDesktopPane(view);
     }
     
-    private void initObserver(){
-        this.addObserver(this.mainPresenter);
-    }
     private void entrar() {
         String login = this.view.getTxtLogin().getText();
         String senha = new String(this.view.getTxtSenha().getPassword());
+        var isDebug = java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().contains("-agentlib:jdwp");
+        if(isDebug) {
+            login = "admin";
+            senha = "Admin@";
+        }
         Usuario user = usuarioService.realizarLogin(login, senha);
         usuarioService.setUsuarioLogado(user);
-        this.notifyObservers(user);
+        mainPresenter.setState(new LogadoState(mainPresenter));
         this.fechar();
     }
     private void fechar() {

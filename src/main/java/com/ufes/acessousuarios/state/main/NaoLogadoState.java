@@ -7,10 +7,11 @@ public class NaoLogadoState extends MainPresenterState {
 
     public NaoLogadoState(MainPresenter mainPresenter) {
         super(mainPresenter);
-        this.initComponentes();
-        this.configBotoes();
     }
-    private void configBotoes() {
+
+    @Override
+    public void initComponentes() {
+        super.initComponentes();
         this.view.setTitle("Não logado");
         this.view.getBarraMenu().setVisible(false);
     }

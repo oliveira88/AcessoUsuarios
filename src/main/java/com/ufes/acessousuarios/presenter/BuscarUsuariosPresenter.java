@@ -2,8 +2,11 @@ package com.ufes.acessousuarios.presenter;
 
 import com.ufes.acessousuarios.Util.DateManipulation;
 import com.ufes.acessousuarios.model.Usuario;
+import com.ufes.acessousuarios.observer.IObserver;
 import com.ufes.acessousuarios.service.UsuarioService;
 import com.ufes.acessousuarios.service.UsuarioServiceFactory;
+import com.ufes.acessousuarios.state.manternotificacao.EnviarNotificacaoState;
+import com.ufes.acessousuarios.state.manternotificacao.VisualizarNotificacaoState;
 import com.ufes.acessousuarios.state.manterusuario.VisualizarUsuarioState;
 import com.ufes.acessousuarios.view.BuscarUsuariosView;
 import java.awt.event.ActionEvent;
@@ -15,7 +18,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 
-public class BuscarUsuariosPresenter {
+public class BuscarUsuariosPresenter implements IObserver {
     
     private final BuscarUsuariosView view;
     private final MainPresenter mainPresenter;
@@ -89,11 +92,8 @@ public class BuscarUsuariosPresenter {
     }
 
      private void initListeners() {
-        view.getjFechar().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                view.dispose();
-            }
+        view.getBtnFechar().addActionListener((e) -> {
+            view.dispose();
         });
      
         view.getjTable().addMouseListener(new MouseAdapter() {
@@ -105,22 +105,26 @@ public class BuscarUsuariosPresenter {
             }
         });
     
-       view.getBtnVisaulizarUsuario().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                var manter = new ManterUsuarioPresenter(mainPresenter);
-                try {
-                    if(getUsuarioSelected() != null){
-                     manter.setState(new VisualizarUsuarioState(manter, getUsuarioSelected()));
-                    }
-                    
-                } catch (Exception ex) {
-                    Logger.getLogger(BuscarUsuariosPresenter.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+       view.getBtnVisaulizarUsuario().addActionListener((e) -> {
+           var manter = new ManterUsuarioPresenter(mainPresenter);
+           try {
+               if(getUsuarioSelected() != null){
+                   manter.setState(new VisualizarUsuarioState(manter, getUsuarioSelected()));
+               }
+           } catch (Exception ex) {
+               Logger.getLogger(BuscarUsuariosPresenter.class.getName()).log(Level.SEVERE, null, ex);
+           }
         });
-     
-     
+       
+       view.getBtnEnviarNotificacao().addActionListener((e) -> {
+           try {
+               if(getUsuarioSelected() != null){
+                    new ManterNotificacaoPresenter(mainPresenter, getUsuarioSelected());
+               }
+           } catch (Exception ex) {
+               Logger.getLogger(BuscarUsuariosPresenter.class.getName()).log(Level.SEVERE, null, ex);
+           }
+       });
     }
     
     private Usuario getUsuarioSelected() throws Exception {
@@ -133,6 +137,11 @@ public class BuscarUsuariosPresenter {
     private Long getUsuarioIdSelected() {
         int rowIndex = view.getjTable().getSelectedRow();
         return Long.valueOf(view.getjTable().getValueAt(rowIndex, 0).toString());
+    }
+
+    @Override
+    public void update() {
+        this.loadUsuarios();
     }
      
 }

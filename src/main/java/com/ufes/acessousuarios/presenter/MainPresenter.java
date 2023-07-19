@@ -13,6 +13,9 @@ import com.ufes.acessousuarios.view.MainView;
 import java.awt.Component;
 import javax.swing.JOptionPane;
 import com.ufes.acessousuarios.observer.IObserver;
+import com.ufes.acessousuarios.service.NotificacaoService;
+import com.ufes.acessousuarios.service.NotificacaoServiceFactory;
+import javax.swing.JInternalFrame;
 
 public final class MainPresenter implements IObserver {
     private final MainView view;
@@ -58,6 +61,21 @@ public final class MainPresenter implements IObserver {
             this.state.logout();
             showDialog("Deslogar");
         });
+        this.view.getBtnNotificacoes().addActionListener((e) -> {
+            try {
+                this.state.buscarNotificacoes();
+            } catch(RuntimeException ex) {
+                JOptionPane.showMessageDialog(view, ex.getMessage(), "Notificações", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+        
+    }
+    
+    public void fecharTodasJanelas(){
+        for(JInternalFrame frame : view.getDesktopPane().getAllFrames()) {
+            frame.dispose();
+        }
+        view.getDesktopPane().removeAll();
     }
     
     private void showDialog(String message) {

@@ -28,7 +28,7 @@ public class BuscarUsuariosView extends javax.swing.JInternalFrame {
         btnVisaulizarUsuario = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable = new javax.swing.JTable();
-        jFechar = new javax.swing.JButton();
+        btnFechar = new javax.swing.JButton();
 
         jLabel1.setText("jLabel1");
 
@@ -53,7 +53,7 @@ public class BuscarUsuariosView extends javax.swing.JInternalFrame {
         ));
         jScrollPane1.setViewportView(jTable);
 
-        jFechar.setText("Fechar");
+        btnFechar.setText("Fechar");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -62,7 +62,7 @@ public class BuscarUsuariosView extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jFechar, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnFechar, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnVisaulizarUsuario)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -73,7 +73,7 @@ public class BuscarUsuariosView extends javax.swing.JInternalFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jFechar)
+                .addComponent(btnFechar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -102,14 +102,14 @@ public class BuscarUsuariosView extends javax.swing.JInternalFrame {
         return btnVisaulizarUsuario;
     }
 
-    public JButton getjFechar() {
-        return jFechar;
+    public JButton getBtnFechar() {
+        return btnFechar;
     }
   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEnviarNotificacao;
+    private javax.swing.JButton btnFechar;
     private javax.swing.JButton btnVisaulizarUsuario;
-    private javax.swing.JButton jFechar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable;

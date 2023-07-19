@@ -1,6 +1,7 @@
 package com.ufes.acessousuarios.dao;
 
 import com.ufes.acessousuarios.connection.SQLite;
+import com.ufes.acessousuarios.model.Notificacao;
 import com.ufes.acessousuarios.model.Usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,6 +17,7 @@ public class NotificacaoDAO implements INotificacaoDAO {
 
     public NotificacaoDAO() {
         criarTabelaNotificacao();
+        criarTabelaNotificacaoUsuario();
     }
     
     private void criarTabelaNotificacao(){
@@ -24,7 +26,13 @@ public class NotificacaoDAO implements INotificacaoDAO {
         var sql = "CREATE TABLE IF NOT EXISTS Notificacao("
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + "titulo VARCHAR(200) NOT NULL,"
-                + "mensagem VARCHAR(300) NOT NULL UNIQUE"
+                + "mensagem VARCHAR(300) NOT NULL UNIQUE,"
+                + "destinatario_id INTEGER NOT NULL,"                                
+                + "remetente_id INTEGER NOT NULL,"
+                + "aprovacao BOOLEAN DEFAULT false NOT NULL,"
+                + "visualizada BOOLEAN DEFAULT false NOT NULL,"
+                + "data_envio DATE NOT NULL,"
+                + "data_visualizacao DATE"
                 + " );";
         try {
             con = SQLite.getConnection();
@@ -39,217 +47,149 @@ public class NotificacaoDAO implements INotificacaoDAO {
         
     }
 
+//    @Override
+//    public Long criar(Notificacao notificacao) throws RuntimeException {
+//        Connection con = null;
+//        PreparedStatement ps = null;
+//        ResultSet rs = null;
+//      
+//        var sql = ""
+//                .concat("\n INSERT INTO Notificacao(")
+//                .concat("\n            titulo,")
+//                .concat("\n            mensagem,")
+//                .concat("\n            destinatario_id,")
+//                .concat("\n            remetente_id,")
+//                .concat("\n            notificacao_id,")
+//                .concat("\n            data_envio)")
+//                .concat("\n VALUES(?,?,?,?);");
+//        try {
+//            con = SQLite.getConnection();
+//            ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+//            ps.setString(1, notificacao.getTitulo());
+//            ps.setString(2, notificacao.getMensagem());
+//            rs = ps.getGeneratedKeys();
+//            
+//            if(rs.next()) {
+//                return rs.getLong(1);
+//            } else {
+//                throw new RuntimeException("Não foi possível inserir a notificação");
+//            }
+//        } catch (SQLException ex) {
+//           throw new RuntimeException("Erro ao criar notificação.\n" + ex.getMessage());
+//        } finally {
+//            SQLite.closeConnection(con, ps);
+//        }
+//    }
+
     @Override
-    public Usuario login(String login, String senha) throws RuntimeException {
+    public Notificacao obterPorId(long id) throws RuntimeException {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        var sql = "SELECT id, nome, admin, data_criacao FROM Usuario "
-                + "WHERE login = ? "
-                + "AND senha = ?;";
+        var sql = "SELECT id, titulo, mensagem FROM Notificacao "
+                + "WHERE id = ?";
         try {
             con = SQLite.getConnection();
             ps = con.prepareStatement(sql);
-            ps.setString(1, login);
-            ps.setString(2, senha);
+            ps.setLong(1, id);
             rs = ps.executeQuery();
             if (!rs.next()) {
-               throw new RuntimeException("Usuário não encontrado");
+               throw new RuntimeException("Notificação não encontrada");
             }
-            long id = rs.getLong(1);
-            String nome = rs.getString(2);
-            boolean isAdmin = rs.getBoolean(3);
-            LocalDateTime dataCriacao = rs.getTimestamp(4).toLocalDateTime();
-            return new Usuario(id, login, senha, nome, isAdmin, dataCriacao);
+            return new Notificacao(rs.getLong(1), rs.getString(2), rs.getString(3));
         } catch (SQLException ex) {
-            throw new RuntimeException("Erro ao buscar usuário.\n"+ ex.getMessage());
+            throw new RuntimeException("Erro ao buscar notificação.\n"+ ex.getMessage());
         } finally {
             SQLite.closeConnection(con, ps, rs);
         }
-    } 
-
-    @Override
-    public void atualizarSenha(Usuario usuario) throws RuntimeException {
-       Connection con = null;
-       PreparedStatement ps = null;
-       var sql = "UPDATE Usuario "
-                   + "SET senha = ?"
-                   + "WHERE id = ?";
-       try {
-            con = SQLite.getConnection();
-            ps = con.prepareStatement(sql);
-            ps.setString(1, usuario.getSenha());
-            ps.setLong(2, usuario.getId());
-            ps.executeUpdate();
-       } catch (SQLException ex) {
-           throw new RuntimeException("Erro ao atualizar usuário.\n" + ex.getMessage());
-       } finally {
-           SQLite.closeConnection(con, ps);
-       }
     }
 
     @Override
-    public void criar(Usuario usuario) throws SQLException {
+    public List<Notificacao> obterTodas(Usuario usuario) throws RuntimeException {
         Connection con = null;
         PreparedStatement ps = null;
-        var sql = "INSERT INTO Usuario(nome, login, senha, admin, data_criacao)"
-                + "VALUES (?, ? ,? , ?, ?);";
+        ResultSet rs = null;
+        List<Notificacao> notificacoes = new ArrayList<>();
+        var sql = "SELECT n.id, n.titulo, n.mensagem FROM Notificacao n "
+                + "INNER JOIN Notificacao_Usuario nu ON nu.notificacao_id = n.id "
+                + "WHERE nu.destinatario_id = ? ";
+
         try {
             con = SQLite.getConnection();
             ps = con.prepareStatement(sql);
-            ps.setString(1, usuario.getNome());
-            ps.setString(2, usuario.getLogin());
-            ps.setString(3, usuario.getSenha());
-            ps.setBoolean(4, usuario.isAdmin());
+            ps.setLong(1, usuario.getId());
+            rs = ps.executeQuery();
+            if (!rs.next()) {
+               return notificacoes;
+            }
+            do {
+                Long id = rs.getLong(1);
+                String titulo = rs.getString(2);
+                String mensagem = rs.getString(3);
+                notificacoes.add(new Notificacao(id, titulo, mensagem));
+            } while(rs.next());
+            
+            return notificacoes;
+        } catch (SQLException ex) {
+            throw new RuntimeException("Erro ao buscar notificações.\n"+ ex.getMessage());
+        } finally {
+            SQLite.closeConnection(con, ps, rs);
+        }
+    }
+
+    @Override
+    public void enviar(Notificacao notificacao, Usuario remetente, Usuario destinatario) throws RuntimeException {
+        Connection con = null;
+        PreparedStatement ps = null;
+
+        var sql = ""
+                .concat("\n INSERT INTO Notificacao(")
+                .concat("\n            titulo,")
+                .concat("\n            mensagem,")
+                .concat("\n            destinatario_id,")
+                .concat("\n            remetente_id,")
+                .concat("\n            data_envio)")
+                .concat("\n VALUES(?,?,?,?,?);");
+        try {
+            con = SQLite.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, notificacao.getTitulo());
+            ps.setString(2, notificacao.getMensagem());
+
+            ps.setLong(3, destinatario.getId());
+            ps.setLong(4, remetente.getId());
             ps.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
             ps.executeUpdate();
             ps.close();
         } catch (SQLException ex) {
-           throw new RuntimeException("Erro ao atualizar usuário.\n" + ex.getMessage());
+           throw new RuntimeException("Erro ao enviar notificação.\n" + ex.getMessage());
         } finally {
             SQLite.closeConnection(con, ps);
         }
     }
 
     @Override
-    public void deletar(long id) throws RuntimeException {
+    public void lerNotificacao(Usuario usuario, Long idNotificacao) throws RuntimeException {
        Connection con = null;
        PreparedStatement ps = null;
-       var sql = "DELETE FROM Usuario WHERE id = ?;";
-       try {
+        var sql = ""
+                .concat("\n UPDATE Notificacao_Usuario ")
+                .concat("\n SET     visualizada = 1,")
+                .concat("\n         data_visualizacao = ?")
+                .concat("\n WHERE notificacao_id = ?")
+                .concat("\n AND destinatario_id = ?");
+        
+        try {
             con = SQLite.getConnection();
             ps = con.prepareStatement(sql);
-            ps.setLong(1, id);
-            ps.execute();
-       } catch (SQLException ex) {
-           throw new RuntimeException("Erro ao excluir usuário.\n" + ex.getMessage());
-       } finally {
-           SQLite.closeConnection(con, ps);
-       }
-    }
-
-    @Override
-    public void atualizar(Usuario usuario) throws RuntimeException {
-       Connection con = null;
-       PreparedStatement ps = null;
-        var sql = "UPDATE Usuario "
-                + "SET login = ?,"
-                + "SET senha = ?,"
-                + "SET nome = ?,"
-                + "SET admin = ?,"
-                + "WHERE id = ?";
-       try {
-            con = SQLite.getConnection();
-            ps = con.prepareStatement(sql);
-            ps.setString(1, usuario.getLogin());
-            ps.setString(2, usuario.getSenha());
-            ps.setString(3, usuario.getNome());
-            ps.setBoolean(4, usuario.isAdmin());
-            ps.setLong(5, usuario.getId());
+            ps.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now()));
+            ps.setLong(2, idNotificacao);
+            ps.setLong(3, usuario.getId());
             ps.executeUpdate();
        } catch (SQLException ex) {
-           throw new RuntimeException("Erro ao atualizar usuário.\n" + ex.getMessage());
+           throw new RuntimeException("Erro ao ler notificação.\n" + ex.getMessage());
        } finally {
            SQLite.closeConnection(con, ps);
        }
     }
-
-    @Override
-    public Usuario obterPorId(long id) throws RuntimeException {
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        var sql = "SELECT * FROM Usuario WHERE id = ?";
-        try {
-            con = SQLite.getConnection();
-            ps = con.prepareStatement(sql);
-            ps.setLong(1, id);
-            rs = ps.executeQuery();
-            
-            if(!rs.next()) {
-                throw new RuntimeException("Usuário não encontrado.\n");
-            }
-            Long id_result = rs.getLong(1);
-            String nome = rs.getString(2);
-            String login = rs.getString(3);
-            String senha = rs.getString(4);
-            boolean isAdmin = rs.getBoolean(5);
-            LocalDateTime dataCriacao = rs.getTimestamp(6).toLocalDateTime();
-            return new Usuario(id_result, nome, login, senha, isAdmin, dataCriacao);
-       } catch (SQLException ex) {
-            throw new RuntimeException("Erro ao obter usuário.\n" + ex.getMessage());
-       } finally {
-           SQLite.closeConnection(con, ps, rs);
-       }
-    }
-
-    @Override
-    public List<Usuario> obterPorNome(String nome) throws RuntimeException {
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        List<Usuario> usuarios = new ArrayList<>();
-        var sql = "SELECT * FROM Usuario WHERE id = ?";
-        try {
-            con = SQLite.getConnection();
-            ps = con.prepareStatement(sql);
-            ps.setString(1, "%" + nome + "%");
-            rs = ps.executeQuery();
-            
-            if(!rs.next()) {
-                throw new RuntimeException("Usuário não encontrado.\n");
-            }
-            do{
-                Long id = rs.getLong(1);
-                String nome_result = rs.getString(2);
-                String login = rs.getString(3);
-                String senha = rs.getString(4);
-                boolean isAdmin = rs.getBoolean(5);
-                LocalDateTime dataCriacao = rs.getTimestamp(6).toLocalDateTime();
-                usuarios.add(new Usuario(id, nome_result, login, senha, isAdmin, dataCriacao));
-            } while(rs.next());
-            
-            return usuarios;
-       } catch (SQLException ex) {
-            throw new RuntimeException("Erro ao obter usuário.\n" + ex.getMessage());
-       } finally {
-           SQLite.closeConnection(con, ps, rs);
-       }        
-    }
-
-    @Override
-    public List<Usuario> obterTodos() throws RuntimeException {
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        List<Usuario> usuarios = new ArrayList<>();
-        var sql = "SELECT * FROM Usuario";
-        try {
-            con = SQLite.getConnection();
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
-            
-            while(rs.next()) {
-                Long id = rs.getLong(1);
-                String nome_result = rs.getString(2);
-                String login = rs.getString(3);
-                String senha = rs.getString(4);
-                boolean isAdmin = rs.getBoolean(5);
-                LocalDateTime dataCriacao = rs.getTimestamp(6).toLocalDateTime();
-                usuarios.add(new Usuario(id, nome_result, login, senha, isAdmin, dataCriacao));
-            }
-            
-            return usuarios;
-       } catch (SQLException ex) {
-            throw new RuntimeException("Erro ao obter usuários.\n" + ex.getMessage());
-       } finally {
-           SQLite.closeConnection(con, ps, rs);
-       } 
-    }
-
-    @Override
-    public void autorizarUsuario(long id) throws RuntimeException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-       
 }

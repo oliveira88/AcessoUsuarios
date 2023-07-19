@@ -6,10 +6,12 @@ import com.ufes.acessousuarios.view.ManterUsuarioView;
 
 public abstract class ManterUsuarioState {
     protected ManterUsuarioPresenter presenter;
+    protected ManterUsuarioView view;
     protected Usuario usuario;
 
     public ManterUsuarioState(ManterUsuarioPresenter presenter, Usuario usuario) {
         this.presenter = presenter;
+        this.view = this.presenter.getView();
         this.usuario = usuario;
         this.initComponents();
     }
@@ -24,13 +26,22 @@ public abstract class ManterUsuarioState {
         throw new RuntimeException("Não é possível executar excluir.");
     }
     public void cancelar() {
-        this.presenter.getView().dispose();
+        throw new RuntimeException("Não é possível executar cancelar.");
+    }
+    public void fechar() {
+        this.view.dispose();
     }
     
-    public void initComponents() {
-       this.presenter.getView().getBtnEditar().setVisible(false);
-       this.presenter.getView().getBtnExcluir().setVisible(false);
-       this.presenter.getView().getChkAdmin().setVisible(false);
-       this.presenter.getView().getLblDataCadastro().setVisible(false);
+    protected void initComponents() {
+        this.view.getBtnCancelar().setEnabled(false);
+        this.view.getBtnConfirmar().setEnabled(false);
+        this.view.getBtnEditar().setEnabled(false);
+        this.view.getBtnExcluir().setEnabled(false);
+        this.view.getBtnFechar().setVisible(true);
+        this.view.getChkAdmin().setEnabled(false);
+        this.view.getLblDataCadastro().setVisible(false);
+        this.view.getTxtNome().setEnabled(false);
+        this.view.getTxtSenha().setEnabled(false);
+        this.view.getTxtLogin().setEnabled(false);
     }
 }

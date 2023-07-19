@@ -14,14 +14,21 @@ public class IncluirUsuarioState extends ManterUsuarioState {
     
     public IncluirUsuarioState(ManterUsuarioPresenter presenter, Usuario usuario) {
         super(presenter, usuario);
-        registerListeners();
     }
     
     @Override
      public void initComponents(){
-       super.initComponents();
-       this.presenter.getView().setTitle("Cadastrar Usuário");
-       this.presenter.getView().getChkAdmin().setVisible(true);
+        super.initComponents();
+        this.view.setTitle("Cadastrar Usuário");
+        this.view.getTxtNome().setEnabled(true);
+        this.view.getTxtSenha().setEnabled(true);
+        this.view.getTxtLogin().setEnabled(true);
+        this.view.getChkAdmin().setEnabled(true);
+        this.view.getBtnConfirmar().setEnabled(true);
+
+        this.view.getBtnCancelar().setVisible(false);
+        this.view.getBtnEditar().setVisible(false);
+        this.view.getBtnExcluir().setVisible(false);
     }
      
     @Override
@@ -35,43 +42,24 @@ public class IncluirUsuarioState extends ManterUsuarioState {
       this.command.executar();
     }
     
-    private void registerListeners() {
-        this.presenter.getView().getBtnConfirmar().addActionListener((e) -> {
-            try {
-                this.salvar();
-                JOptionPane.showMessageDialog(presenter.getView(), "Usuário salvo com sucesso", "Sucesso!",JOptionPane.INFORMATION_MESSAGE);   
-                this.presenter.getView().dispose();
-            } catch(Exception ex) {
-                JOptionPane.showMessageDialog(presenter.getView(), "Erro para Salvar o usuário " + ex, "Erro!", JOptionPane.ERROR_MESSAGE);
-            }
-        });
-          this.presenter.getView().getBtnCancelar().addActionListener((e) -> {
-            try {
-                this.cancelar();
-            } catch(Exception ex) {
-                JOptionPane.showMessageDialog(presenter.getView(), "Erro para Salvar o usuário " + ex, "Erro!", JOptionPane.ERROR_MESSAGE);
-            }
-        });
-    }
-    
     public Usuario lerFormulario() {
         boolean isAdmin = UsuarioServiceFactory.getInstance().getService().getUsuarios().isEmpty();
-        String login = this.presenter.getView().getTxtLogin().getText();
-        String senha = new String(this.presenter.getView().getTxtSenha().getPassword());
-        String nome = this.presenter.getView().getTxtNome().getText();
+        String login = this.view.getTxtLogin().getText();
+        String senha = new String(this.view.getTxtSenha().getPassword());
+        String nome = this.view.getTxtNome().getText();
         usuario = new Usuario(login, senha, nome, isAdmin, LocalDateTime.now());
         return usuario;
     }
     
     
     public Boolean validarCampos(){
-        if(this.presenter.getView().getTxtLogin().getText() == null || this.presenter.getView().getTxtLogin().getText().isBlank()){
+        if(this.view.getTxtLogin().getText() == null || this.view.getTxtLogin().getText().isBlank()){
             return false;
         }
-        if(this.presenter.getView().getTxtSenha().getPassword() == null || this.presenter.getView().getTxtSenha().getPassword().length <= 0){
+        if(this.view.getTxtSenha().getPassword() == null || this.view.getTxtSenha().getPassword().length <= 0){
             return false;
         }
-        if(this.presenter.getView().getTxtNome().getText() == null || this.presenter.getView().getTxtNome().getText().isBlank()){
+        if(this.view.getTxtNome().getText() == null || this.view.getTxtNome().getText().isBlank()){
             return false;
         }
        return true;

@@ -2,10 +2,10 @@ package com.ufes.acessousuarios.dao;
 
 public class NotificacaoDaoFactory {
     private static NotificacaoDaoFactory instancia;
-    private INotificacaoDAO usuarioDao;
+    private INotificacaoDAO notificacaoDao;
     
     private NotificacaoDaoFactory(){
-        usuarioDao = new NotificacaoDAO();
+        notificacaoDao = new NotificacaoDAO();
     } 
     
     public static NotificacaoDaoFactory getInstance() {
@@ -16,6 +16,6 @@ public class NotificacaoDaoFactory {
     }
 
     public INotificacaoDAO getNotificacaoDAO() {
-        return usuarioDao;
+        return notificacaoDao;
     }
 }

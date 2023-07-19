@@ -2,8 +2,10 @@ package com.ufes.acessousuarios.state.main;
 
 import com.ufes.acessousuarios.presenter.BuscarNotificacoesPresenter;
 import com.ufes.acessousuarios.presenter.BuscarUsuariosPresenter;
+import com.ufes.acessousuarios.presenter.LoginPresenter;
 import com.ufes.acessousuarios.presenter.MainPresenter;
 import com.ufes.acessousuarios.presenter.ManterUsuarioPresenter;
+import com.ufes.acessousuarios.service.NotificacaoServiceFactory;
 import com.ufes.acessousuarios.service.UsuarioServiceFactory;
 
 public class LogadoState extends MainPresenterState {
@@ -44,11 +46,18 @@ public class LogadoState extends MainPresenterState {
 
     @Override
     public void buscarNotificacoes() {
-        new BuscarNotificacoesPresenter(presenter);
+        if(!NotificacaoServiceFactory.getInstance().getService().obterNotificacoes().isEmpty()) {
+            new BuscarNotificacoesPresenter(presenter);
+        } else {
+            throw new RuntimeException("Você não possui notificações.");
+        }
     }
     
+    @Override
     public void logout() {
-        throw new RuntimeException("Não é possível fazer o logout.");
+        presenter.fecharTodasJanelas();
+        presenter.setState(new NaoLogadoState(presenter));
+        new LoginPresenter(presenter);
     }
 
     public void configurarLog() {

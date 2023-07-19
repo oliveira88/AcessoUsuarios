@@ -14,79 +14,66 @@ public class EditarUsuarioState extends ManterUsuarioState {
 
     public EditarUsuarioState(ManterUsuarioPresenter presenter, Usuario usuario) {
         super(presenter, usuario);
-        initComponents();
         initCampos();
-        registerListeners();
     }
         
+    @Override
     public void initComponents(){
-       this.presenter.getView().setTitle("Editar Usuário");
-       this.presenter.getView().getBtnConfirmar().setEnabled(true);
-       this.presenter.getView().getBtnEditar().setVisible(false);
-       this.presenter.getView().getBtnExcluir().setVisible(false);
-       this.presenter.getView().getChkAdmin().setVisible(true);
-       this.presenter.getView().getLblDataCadastro().setVisible(true);
+        super.initComponents();
+        this.view.setTitle("Editar Usuário");
+        this.view.getChkAdmin().setEnabled(true);
+        this.view.getTxtNome().setEnabled(true);
+        this.view.getTxtSenha().setEnabled(true);
+        this.view.getTxtLogin().setEnabled(true);
+        this.view.getBtnConfirmar().setEnabled(true);
+        this.view.getBtnCancelar().setEnabled(true);
+        this.view.getChkAdmin().setVisible(true);
+        this.view.getLblDataCadastro().setVisible(true);
     }
     
     private void initCampos(){
-      this.presenter.getView().getChkAdmin().setEnabled(true);
-      this.presenter.getView().getTxtNome().setEnabled(true);
-      this.presenter.getView().getTxtSenha().setEnabled(true);
-      this.presenter.getView().getTxtLogin().setEnabled(true);
+      this.view.getChkAdmin().setEnabled(true);
+      this.view.getTxtNome().setEnabled(true);
+      this.view.getTxtSenha().setEnabled(true);
+      this.view.getTxtLogin().setEnabled(true);
     }
     
     public Usuario lerFormulario() {
-        String login = this.presenter.getView().getTxtLogin().getText();
-        String senha = new String(this.presenter.getView().getTxtSenha().getPassword());
-        String nome = this.presenter.getView().getTxtNome().getText();
+        String login = this.view.getTxtLogin().getText();
+        String senha = new String(this.view.getTxtSenha().getPassword());
+        String nome = this.view.getTxtNome().getText();
         usuario = new Usuario(usuario.getId(),login, senha, nome, true, LocalDateTime.now());
         return usuario;
     }
     
     
     public Boolean validarCampos(){
-        if(this.presenter.getView().getTxtLogin().getText() == null || this.presenter.getView().getTxtLogin().getText().isBlank()){
+        if(this.view.getTxtLogin().getText() == null || this.view.getTxtLogin().getText().isBlank()){
             return false;
         }
-        if(this.presenter.getView().getTxtSenha().getPassword() == null || this.presenter.getView().getTxtSenha().getPassword().length <= 0){
+        if(this.view.getTxtSenha().getPassword() == null || this.view.getTxtSenha().getPassword().length <= 0){
             return false;
         }
-          if(this.presenter.getView().getTxtNome().getText() == null || this.presenter.getView().getTxtNome().getText().isBlank()){
+          if(this.view.getTxtNome().getText() == null || this.view.getTxtNome().getText().isBlank()){
             return false;
         }
        return true;
     }
     
-    private void registerListeners() {
-        this.presenter.getView().getBtnConfirmar().addActionListener((e) -> {
-            try {
-                this.editar();
-                JOptionPane.showMessageDialog(presenter.getView(), "Usuário editar com sucesso", "Sucesso!",JOptionPane.INFORMATION_MESSAGE);   
-                this.presenter.setState(new VisualizarUsuarioState(presenter, usuario));
-            } catch(Exception ex) {
-                JOptionPane.showMessageDialog(presenter.getView(), "Erro para editar o usuário " + ex, "Erro!", JOptionPane.ERROR_MESSAGE);
-            }
-        });
-        this.presenter.getView().getBtnCancelar().addActionListener((e) -> {
-         try {
-                this.cancelar();
-            } catch(Exception ex) {
-                JOptionPane.showMessageDialog(presenter.getView(), "Erro para Salvar o usuário " + ex, "Erro!", JOptionPane.ERROR_MESSAGE);
-            }
-        });
-    }
-    
     @Override
     public void editar() {
       if(!validarCampos()){
-         JOptionPane.showMessageDialog(presenter.getView(), "Informe todo os campos para realizar o cadastro", "Atenção!",JOptionPane.INFORMATION_MESSAGE);   
+         JOptionPane.showMessageDialog(view, "Informe todo os campos para realizar o cadastro", "Atenção!",JOptionPane.INFORMATION_MESSAGE);   
       }
       this.usuario = this.lerFormulario();
       ValidadorSenha.validar(this.usuario.getSenha());
-      command = new EditarUsuarioCommand(presenter.getUsuarioService(),this.usuario);
+      command = new EditarUsuarioCommand(this.usuario);
       this.command.executar();
     }
-    
-    
+
+    @Override
+    public void cancelar() {
+        presenter.setState(new VisualizarUsuarioState(presenter, usuario));
+    }
     
 }

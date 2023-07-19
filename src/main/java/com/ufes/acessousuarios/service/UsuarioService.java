@@ -9,9 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UsuarioService extends Observable {
-    private static UsuarioService instancia;
     private Usuario usuarioLogado;
-    private IUsuarioDAO usuarioDAO;
+    private final IUsuarioDAO usuarioDAO;
     private List<Usuario> usuarios;
   
     public UsuarioService(IUsuarioDAO dao) {
@@ -36,6 +35,9 @@ public class UsuarioService extends Observable {
         return usuarios;
     } 
 
+    public Usuario getUsuario(Long id) {
+        return usuarioDAO.obterPorId(id);
+    }
     public void setUsuarioLogado(Usuario usuarioLogado) {
         this.usuarioLogado = usuarioLogado;
     }
@@ -51,6 +53,5 @@ public class UsuarioService extends Observable {
     public void atualizar(Usuario usuario) throws RuntimeException{
         this.usuarioDAO.atualizar(usuario);
     }
-     
     
 }
