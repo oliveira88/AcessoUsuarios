@@ -28,8 +28,7 @@ public class UsuarioDAO implements IUsuarioDAO {
                 + "senha VARCHAR(100) NOT NULL,"
                 + "admin BOOLEAN DEFAULT false NOT NULL,"
                 + "ativo BOOLEAN DEFAULT false NOT NULL,"
-                + "data_criacao DATE NOT NULL,"
-                + "data_exclusao DATE);";
+                + "data_criacao DATE NOT NULL);";
         try {
             con = SQLite.getConnection();
             st = con.createStatement();
