@@ -22,7 +22,11 @@ public class VisualizarUsuarioState extends ManterUsuarioState {
        this.view.getBtnCancelar().setVisible(true);
        this.view.getBtnCancelar().setEnabled(false);
        this.view.getBtnExcluir().setVisible(true);
-       this.view.getBtnExcluir().setEnabled(true);
+       if(usuario.getLogin().equals(usuarioService.getUsuarioLogado().getLogin())){
+           this.view.getBtnExcluir().setEnabled(false);
+       } else {
+           this.view.getBtnExcluir().setEnabled(true);
+       }
        this.view.getBtnConfirmar().setEnabled(false);
        this.view.getBtnConfirmar().setEnabled(false);
        this.view.getLblDataCadastro().setVisible(true);
