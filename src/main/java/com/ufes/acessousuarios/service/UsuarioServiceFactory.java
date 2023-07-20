@@ -26,4 +26,9 @@ public class UsuarioServiceFactory {
     public UsuarioService getService() {
         return service;
     }
+    
+    public static void reset() {
+        instancia = null;
+        UsuarioDaoFactory.reset();
+    }
 }

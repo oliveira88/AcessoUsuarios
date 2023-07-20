@@ -40,10 +40,6 @@ public class IncluirUsuarioCommand extends ManterUsuarioCommand {
                         "Solicitação enviada", 
                         JOptionPane.INFORMATION_MESSAGE
                     );
-//                    var usuarios = usuarioService.obterTodosUsuarios();
-//                    var usuarioLogado = usuarios.get(usuarios.size() - 1);
-//                    usuarioService.setUsuarioLogado(usuarioLogado);
-//                    mainPresenter.setState(new LogadoState(mainPresenter));
                 }
                 
             }

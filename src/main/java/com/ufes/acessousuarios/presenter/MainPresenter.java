@@ -55,7 +55,7 @@ public final class MainPresenter implements IObserver {
         });
         this.view.getMenuSair().addActionListener((e) -> {
             this.state.logout();
-            showDialog("Deslogar");
+            showDialog("Você deslogou!");
         });
         this.view.getBtnNotificacoes().addActionListener((e) -> {
             this.state.buscarNotificacoes();
@@ -70,7 +70,7 @@ public final class MainPresenter implements IObserver {
     }
     
     private void showDialog(String message) {
-        JOptionPane.showMessageDialog(getView(), message, "TODO!", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(getView(), message, "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
     }
         
     public MainView getView() {

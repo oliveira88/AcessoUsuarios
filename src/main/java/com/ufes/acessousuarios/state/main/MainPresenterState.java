@@ -33,7 +33,7 @@ public abstract class MainPresenterState {
         throw new RuntimeException("Não é possível executar a busca de notificações.");
     }
     public void obterQuantidadeNotificacoes() {
-        throw new RuntimeException("Não é possível obter a quantidade de notificações notificações.");
+        throw new RuntimeException("Não é possível obter a quantidade de notificações.");
     }
 
     public void initComponentes() {

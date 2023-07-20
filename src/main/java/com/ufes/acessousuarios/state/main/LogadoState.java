@@ -1,5 +1,6 @@
 package com.ufes.acessousuarios.state.main;
 
+import com.ufes.acessousuarios.command.main.DeslogarCommand;
 import com.ufes.acessousuarios.command.manternotificacao.ObterQuantidadeNotificacoesCommand;
 import com.ufes.acessousuarios.presenter.BuscarNotificacoesPresenter;
 import com.ufes.acessousuarios.presenter.BuscarUsuariosPresenter;
@@ -22,6 +23,7 @@ public class LogadoState extends MainPresenterState {
         if(isAdmin) {
             this.view.setTitle("Admin");
             this.view.getTipoUsuario().setText("Administrador");
+            this.view.getMenuUsuarios().setVisible(true);
         } else {
             this.view.setTitle("Usuário");
             this.view.getTipoUsuario().setText("Usuário");
@@ -34,6 +36,7 @@ public class LogadoState extends MainPresenterState {
         this.view.getNameUsuario().setVisible(true);
         this.view.getTipoUsuario().setVisible(true);
         this.view.getBtnNotificacoes().setVisible(true);
+        this.view.getMenuLog().setVisible(false);
         this.view.getNameUsuario().setText(UsuarioServiceFactory.getInstance().getService().getUsuarioLogado().getNome());
         this.view.getBtnNotificacoes().setText("Notificações: " + NotificacaoServiceFactory.getInstance().getService().obterNotificacoes().size());
     }
@@ -64,9 +67,7 @@ public class LogadoState extends MainPresenterState {
     
     @Override
     public void logout() {
-        presenter.fecharTodasJanelas();
-        presenter.setState(new NaoLogadoState(presenter));
-        new LoginPresenter(presenter);
+        new DeslogarCommand(presenter).executar();
     }
 
     

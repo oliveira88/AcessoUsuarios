@@ -24,6 +24,8 @@ public class EditarUsuarioState extends ManterUsuarioState {
         this.view.getChkAdmin().setEnabled(true);
         this.view.getTxtNome().setEnabled(true);
         this.view.getTxtSenha().setEnabled(true);
+        this.view.getChkAdmin().setVisible(true);
+        this.view.getChkAtivo().setVisible(true);
         this.view.getTxtLogin().setEnabled(true);
         this.view.getBtnConfirmar().setEnabled(true);
         this.view.getBtnCancelar().setEnabled(true);
@@ -42,7 +44,9 @@ public class EditarUsuarioState extends ManterUsuarioState {
         String login = this.view.getTxtLogin().getText();
         String senha = new String(this.view.getTxtSenha().getPassword());
         String nome = this.view.getTxtNome().getText();
-        usuario = new Usuario(usuario.getId(),login, senha, nome, true, LocalDateTime.now());
+        Boolean isAdm = this.view.getChkAdmin().isSelected();
+        Boolean isAtivo = this.view.getChkAtivo().isSelected();
+        usuario = new Usuario(usuario.getId(),login, senha, nome, isAdm, isAtivo, LocalDateTime.now());
         return usuario;
     }
     

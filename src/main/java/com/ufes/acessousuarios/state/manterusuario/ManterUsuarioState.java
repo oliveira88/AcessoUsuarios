@@ -37,6 +37,7 @@ public abstract class ManterUsuarioState {
     }
     
     protected void initComponents() {
+        
         this.view.getBtnCancelar().setEnabled(false);
         this.view.getBtnConfirmar().setEnabled(false);
         this.view.getBtnEditar().setEnabled(false);
@@ -44,6 +45,8 @@ public abstract class ManterUsuarioState {
         this.view.getBtnFechar().setVisible(true);
         this.view.getChkAdmin().setVisible(false);
         this.view.getChkAdmin().setEnabled(false);
+        this.view.getChkAtivo().setVisible(false);
+        this.view.getChkAtivo().setEnabled(false);
         this.view.getLblDataCadastro().setVisible(false);
         this.view.getTxtNome().setEnabled(false);
         this.view.getTxtSenha().setEnabled(false);

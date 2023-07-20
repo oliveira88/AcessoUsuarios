@@ -9,6 +9,7 @@ import com.ufes.acessousuarios.service.UsuarioServiceFactory;
 import com.ufes.acessousuarios.state.manternotificacao.ManterNotificacaoState;
 import com.ufes.acessousuarios.state.manternotificacao.VisualizarNotificacaoState;
 import com.ufes.acessousuarios.view.BuscarNotificacoesView;
+import java.awt.event.MouseAdapter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -31,6 +32,7 @@ public class BuscarNotificacoesPresenter implements IObserver  {
         loadNotificacoes();
         registerPane();
         configMenus();
+        selectedChangeView();
         this.view.setVisible(true);
     }
     
@@ -63,6 +65,7 @@ public class BuscarNotificacoesPresenter implements IObserver  {
         this.view.getBtnFechar().addActionListener((e) -> {
             view.dispose();
         });
+       
         this.view.getBtnVisualizar().addActionListener((e) -> {
             try {
                 var notificacao = getNotificacaoSelected();
@@ -74,12 +77,35 @@ public class BuscarNotificacoesPresenter implements IObserver  {
                Logger.getLogger(BuscarUsuariosPresenter.class.getName()).log(Level.SEVERE, null, ex);
            }
         });
+        
+         view.getTabelaNotificacao().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                if (view.getTabelaNotificacao().getSelectedRow() > -1) {
+                    selectedChangeView();
+                }
+            }
+        });
     }
     
     private Notificacao getNotificacaoSelected() throws Exception {
         int rowIndex = view.getTabelaNotificacao().getSelectedRow();
         return notificacaoService.obterNotificacoes().get(rowIndex);
     }
+    
+     private boolean checkSeTemElementoSelecionado() {
+        return view.getTabelaNotificacao().getSelectedRow() >= 0;
+    }
+          
+    
+    private void selectedChangeView() {
+        if (checkSeTemElementoSelecionado()) {
+            view.getBtnVisualizar().setEnabled(true);
+        } else {
+           view.getBtnVisualizar().setEnabled(false);
+        }
+    }
+
 
     @Override
     public void update() {

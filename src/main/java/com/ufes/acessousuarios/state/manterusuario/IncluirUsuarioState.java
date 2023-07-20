@@ -52,11 +52,16 @@ public class IncluirUsuarioState extends ManterUsuarioState {
     }
     
     public Usuario lerFormulario() {
-        boolean isAdmin = UsuarioServiceFactory.getInstance().getService().getUsuarios().isEmpty();
+        boolean isAdmin = UsuarioServiceFactory.getInstance().getService().getUsuarios().isEmpty() || this.view.getChkAdmin().isSelected();
+        var usuarioLogado = UsuarioServiceFactory.getInstance().getService().getUsuarioLogado();
         String login = this.view.getTxtLogin().getText();
         String senha = new String(this.view.getTxtSenha().getPassword());
         String nome = this.view.getTxtNome().getText();
-        usuario = new Usuario(login, senha, nome, isAdmin, isAdmin, LocalDateTime.now());
+        if(usuarioLogado != null) {
+            usuario = new Usuario(login, senha, nome, isAdmin, true, LocalDateTime.now());
+        } else {
+            usuario = new Usuario(login, senha, nome, isAdmin, isAdmin, LocalDateTime.now());
+        }
         return usuario;
     }
     

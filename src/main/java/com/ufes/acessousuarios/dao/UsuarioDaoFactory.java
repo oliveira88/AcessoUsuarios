@@ -21,4 +21,7 @@ public class UsuarioDaoFactory {
         return usuarioDao;
     }
     
+    public static void reset() {
+        instancia = null;
+    }
 }

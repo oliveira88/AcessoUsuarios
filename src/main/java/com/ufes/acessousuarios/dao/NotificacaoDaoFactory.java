@@ -18,4 +18,8 @@ public class NotificacaoDaoFactory {
     public INotificacaoDAO getNotificacaoDAO() {
         return notificacaoDao;
     }
+    
+    public static void reset() {
+        instancia = null;
+    }
 }

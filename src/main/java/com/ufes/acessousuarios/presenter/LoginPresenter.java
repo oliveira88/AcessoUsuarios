@@ -31,7 +31,7 @@ public class LoginPresenter {
             }catch(AcessoException ex){
                 JOptionPane.showMessageDialog(view, ex.getMessage());
             } catch(Exception ex){
-                JOptionPane.showMessageDialog(view, "Usuário não encontrado ou senha inválida!" + ex);
+                JOptionPane.showMessageDialog(view, ex.getMessage());
             }
         });
         this.view.getBtnCriar().addActionListener((e) -> {

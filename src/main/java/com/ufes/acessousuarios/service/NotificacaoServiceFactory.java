@@ -29,4 +29,9 @@ public class NotificacaoServiceFactory {
     public NotificacaoService getService() {
         return service;
     }
+    
+    public static void reset() {
+        instancia = null;
+        NotificacaoDaoFactory.reset();
+    }
 }

@@ -41,6 +41,7 @@ public class ManterUsuarioView extends javax.swing.JInternalFrame {
         jLabelCadastroData = new javax.swing.JLabel();
         LabelCadastroData = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
+        chkAtivo = new javax.swing.JCheckBox();
 
         jRadioButton1.setText("jRadioButton1");
 
@@ -82,6 +83,8 @@ public class ManterUsuarioView extends javax.swing.JInternalFrame {
         lblDataCadastro.setText("Data de Cadastro:");
 
         btnCancelar.setText("Cancelar");
+
+        chkAtivo.setText("Ativo");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -126,11 +129,13 @@ public class ManterUsuarioView extends javax.swing.JInternalFrame {
                                 .addGap(0, 155, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblSenha)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(26, 26, 26)
-                                .addComponent(chkAdmin))
-                            .addComponent(lblSenha))
+                                .addComponent(chkAdmin)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(chkAtivo)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -154,7 +159,8 @@ public class ManterUsuarioView extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(chkAdmin))
+                            .addComponent(chkAdmin)
+                            .addComponent(chkAtivo))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabelDataCadastro))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -228,6 +234,10 @@ public class ManterUsuarioView extends javax.swing.JInternalFrame {
         return LabelCadastroData;
     }
 
+    public JCheckBox getChkAtivo() {
+        return chkAtivo;
+    }
+
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel LabelCadastroData;
@@ -237,6 +247,7 @@ public class ManterUsuarioView extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnFechar;
     private javax.swing.JCheckBox chkAdmin;
+    private javax.swing.JCheckBox chkAtivo;
     private javax.swing.JLabel jLabelCadastroData;
     private javax.swing.JLabel jLabelDataCadastro;
     private javax.swing.JRadioButton jRadioButton1;

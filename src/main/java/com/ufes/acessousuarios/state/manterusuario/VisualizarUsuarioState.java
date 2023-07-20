@@ -25,9 +25,9 @@ public class VisualizarUsuarioState extends ManterUsuarioState {
        this.view.getBtnExcluir().setEnabled(true);
        this.view.getBtnConfirmar().setEnabled(false);
        this.view.getBtnConfirmar().setEnabled(false);
-
        this.view.getLblDataCadastro().setVisible(true);
-
+       this.view.getChkAdmin().setVisible(true);
+       this.view.getChkAtivo().setVisible(true);
     }
     
     @Override
@@ -45,6 +45,7 @@ public class VisualizarUsuarioState extends ManterUsuarioState {
     
     
     private void loadCampos(){
+        this.view.getChkAtivo().setSelected(this.usuario.isAtivo());
         this.view.getChkAdmin().setSelected(this.usuario.isAdmin());
         this.view.getTxtNome().setText(this.usuario.getNome());
         this.view.getTxtLogin().setText(this.usuario.getLogin());

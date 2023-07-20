@@ -136,6 +136,7 @@ public class NotificacaoDAO implements INotificacaoDAO {
         Connection con = null;
         PreparedStatement ps = null;
 
+        
         var sql = ""
                 .concat("\n INSERT INTO Notificacao(")
                 .concat("\n            titulo,")
@@ -145,16 +146,29 @@ public class NotificacaoDAO implements INotificacaoDAO {
                 .concat("\n            aprovacao,")
                 .concat("\n            data_envio)")
                 .concat("\n VALUES(?,?,?,?,?,?);");
+        if(notificacao.getAprovacao() == null) {
+            sql = ""
+                .concat("\n INSERT INTO Notificacao(")
+                .concat("\n            titulo,")
+                .concat("\n            mensagem,")
+                .concat("\n            destinatario_id,")
+                .concat("\n            remetente_id,")
+                .concat("\n            data_envio)")
+                .concat("\n VALUES(?,?,?,?,?);");
+        }
         try {
             con = SQLite.getConnection();
             ps = con.prepareStatement(sql);
             ps.setString(1, notificacao.getTitulo());
             ps.setString(2, notificacao.getMensagem());
-
             ps.setLong(3, destinatario.getId());
             ps.setLong(4, remetente.getId());
-            ps.setBoolean(5, notificacao.getAprovacao());
-            ps.setDate(6, Date.valueOf(LocalDate.now()));
+            if(notificacao.getAprovacao() != null) {
+                ps.setBoolean(5, notificacao.getAprovacao());
+                ps.setDate(6, Date.valueOf(LocalDate.now()));
+            } else {
+                ps.setDate(5, Date.valueOf(LocalDate.now()));
+            }
             ps.executeUpdate();
             ps.close(); 
         } catch (SQLException ex) {
