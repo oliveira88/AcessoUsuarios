@@ -6,6 +6,7 @@ import com.ufes.acessousuarios.model.Usuario;
 import com.ufes.acessousuarios.presenter.ManterNotificacaoPresenter;
 import com.ufes.acessousuarios.service.UsuarioService;
 import com.ufes.acessousuarios.service.UsuarioServiceFactory;
+import javax.swing.JOptionPane;
 
 public class AprovarUsuarioCommand implements ICommand {
     private final UsuarioService usuarioService;
@@ -21,6 +22,12 @@ public class AprovarUsuarioCommand implements ICommand {
     @Override
     public void executar() {
         usuarioService.autorizar(usuario);
+        JOptionPane.showMessageDialog(
+            presenter.getView(), 
+            "Usuário autorizado! (Você pode ainda recusá-lo caso seja necessário)", 
+            "Autorizado!", 
+            JOptionPane.INFORMATION_MESSAGE
+        );
     }
 
 }

@@ -5,6 +5,7 @@ import com.ufes.acessousuarios.model.Usuario;
 import com.ufes.acessousuarios.presenter.ManterNotificacaoPresenter;
 import com.ufes.acessousuarios.service.UsuarioService;
 import com.ufes.acessousuarios.service.UsuarioServiceFactory;
+import javax.swing.JOptionPane;
 
 public class RecusarUsuarioCommand implements ICommand {
 private final UsuarioService usuarioService;
@@ -20,6 +21,11 @@ private final UsuarioService usuarioService;
     @Override
     public void executar() {
         usuarioService.recusar(usuario);
-        
+         JOptionPane.showMessageDialog(
+            presenter.getView(), 
+            "Usuário recusado de acessar! (Você pode ainda aprová-lo caso seja necessário)", 
+            "Recusado", 
+            JOptionPane.INFORMATION_MESSAGE
+        );
     }
 }

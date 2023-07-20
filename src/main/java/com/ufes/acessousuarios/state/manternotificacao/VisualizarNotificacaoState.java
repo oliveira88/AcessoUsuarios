@@ -35,11 +35,13 @@ public class VisualizarNotificacaoState extends ManterNotificacaoState {
     @Override
     public void aprovar() {
         new AprovarUsuarioCommand(presenter, remetente).executar();
+        fechar();
     }
 
     @Override
     public void recusar() {
         new RecusarUsuarioCommand(presenter, remetente).executar();
+        fechar();
     }
 
     @Override
