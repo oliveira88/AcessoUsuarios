@@ -57,6 +57,9 @@ public final class MainPresenter implements IObserver {
         this.view.getBtnNotificacoes().addActionListener((e) -> {
             this.state.buscarNotificacoes();
         });
+        this.view.getMenuAlterarSenhar().addActionListener((e) -> {
+            this.state.alterarSenhar();
+        });
         
     }
     

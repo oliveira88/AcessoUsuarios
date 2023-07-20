@@ -65,4 +65,9 @@ public class Usuario {
     public boolean isAtivo() {
         return ativo;
     }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+    
 }

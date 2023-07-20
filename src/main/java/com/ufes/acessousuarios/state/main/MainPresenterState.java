@@ -35,6 +35,9 @@ public abstract class MainPresenterState {
     public void obterQuantidadeNotificacoes() {
         throw new RuntimeException("Não é possível obter a quantidade de notificações.");
     }
+    public void alterarSenhar() {
+        throw new RuntimeException("Não é possível executar alterar senha.");
+    }
 
     public void initComponentes() {
         this.view.getjLabelTipo().setVisible(false);

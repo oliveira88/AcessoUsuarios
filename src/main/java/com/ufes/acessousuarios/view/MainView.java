@@ -40,6 +40,7 @@ public class MainView extends javax.swing.JFrame {
         menuCadastrar = new javax.swing.JMenuItem();
         menuOpcoes = new javax.swing.JMenu();
         menuLog = new javax.swing.JMenuItem();
+        menuAlterarSenhar = new javax.swing.JMenuItem();
         menuSair = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -116,6 +117,9 @@ public class MainView extends javax.swing.JFrame {
 
         menuLog.setText("Log");
         menuOpcoes.add(menuLog);
+
+        menuAlterarSenhar.setText("Alterar senha");
+        menuOpcoes.add(menuAlterarSenhar);
 
         menuSair.setText("Sair");
         menuOpcoes.add(menuSair);
@@ -205,6 +209,10 @@ public class MainView extends javax.swing.JFrame {
     public JPanel getjPanel1() {
         return jPanel1;
     }
+
+    public JMenuItem getMenuAlterarSenhar() {
+        return menuAlterarSenhar;
+    }
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -214,6 +222,7 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelTipo;
     private javax.swing.JLabel jLabelUsuario;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JMenuItem menuAlterarSenhar;
     private javax.swing.JMenuItem menuBuscar;
     private javax.swing.JMenuItem menuCadastrar;
     private javax.swing.JMenuItem menuLog;

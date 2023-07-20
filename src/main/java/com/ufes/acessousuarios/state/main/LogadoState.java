@@ -9,6 +9,8 @@ import com.ufes.acessousuarios.presenter.MainPresenter;
 import com.ufes.acessousuarios.presenter.ManterUsuarioPresenter;
 import com.ufes.acessousuarios.service.NotificacaoServiceFactory;
 import com.ufes.acessousuarios.service.UsuarioServiceFactory;
+import com.ufes.acessousuarios.state.manterusuario.EditarSenhaUsuarioState;
+import com.ufes.acessousuarios.state.manterusuario.VisualizarUsuarioState;
 
 public class LogadoState extends MainPresenterState {
     public LogadoState(MainPresenter mainPresenter) {
@@ -70,8 +72,11 @@ public class LogadoState extends MainPresenterState {
         new DeslogarCommand(presenter).executar();
     }
 
-    
-    public void configurarLog() {
-        throw new RuntimeException("Não é possível a configuração de log.");
+    @Override
+    public void alterarSenhar() {
+        var manter = new ManterUsuarioPresenter(presenter);
+        var usuario = UsuarioServiceFactory.getInstance().getService().getUsuarioLogado();
+        manter.setState(new EditarSenhaUsuarioState(manter, usuario));
     }
+
 }
