@@ -1,7 +1,5 @@
 package com.ufes.acessousuarios.presenter;
 
-import com.ufes.acessousuarios.service.NotificacaoService;
-import com.ufes.acessousuarios.service.NotificacaoServiceFactory;
 import com.ufes.acessousuarios.service.UsuarioService;
 import com.ufes.acessousuarios.service.UsuarioServiceFactory;
 import com.ufes.acessousuarios.state.manterusuario.IncluirUsuarioState;
@@ -30,35 +28,35 @@ public final class ManterUsuarioPresenter {
             try {
                 this.state.salvar();
             } catch(Exception ex) {
-                JOptionPane.showMessageDialog(view, "Erro ao salvar o usuário " + ex, "Erro!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(view, "Erro ao salvar o usuário " +  ex.getMessage(), "Erro!", JOptionPane.ERROR_MESSAGE);
             }
         });
         view.getBtnEditar().addActionListener((e) -> {
             try {
                 this.state.editar();
             } catch(Exception ex) {
-                JOptionPane.showMessageDialog(view, "Erro ao salvar o usuário " + ex, "Erro!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(view, "Erro ao salvar o usuário " + ex.getMessage(), "Erro!", JOptionPane.ERROR_MESSAGE);
             }
         });
         view.getBtnCancelar().addActionListener((e) -> {
             try {
                 this.state.cancelar();
             } catch(Exception ex) {
-                JOptionPane.showMessageDialog(view, "Erro ao cancelar" + ex, "Erro!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(view, "Erro ao cancelar" + ex.getMessage(), "Erro!", JOptionPane.ERROR_MESSAGE);
             }
         });
         this.view.getBtnFechar().addActionListener((e) -> {
             try {
                 this.state.fechar();
             } catch(Exception ex) {
-                JOptionPane.showMessageDialog(view, "Erro ao fechar " + ex, "Erro!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(view, "Erro ao fechar " + ex.getMessage(), "Erro!", JOptionPane.ERROR_MESSAGE);
             }
         });
         this.view.getBtnExcluir().addActionListener((e) -> {
             try {
                 this.state.excluir();
             } catch(Exception ex) {
-                JOptionPane.showMessageDialog(view, "Erro ao excluir " + ex, "Erro!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(view, "Erro ao excluir " + ex.getMessage(), "Erro!", JOptionPane.ERROR_MESSAGE);
             }
         });
     }

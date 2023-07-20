@@ -47,7 +47,7 @@ public class ManterNotificacaoPresenter {
            try {
                 this.state.enviar();
             } catch(Exception ex) {
-                JOptionPane.showMessageDialog(view, "Erro ao enviar a notificação " + ex, "Erro!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(view, "Erro ao enviar a notificação " + ex.getMessage(), "Erro!", JOptionPane.ERROR_MESSAGE);
             }
         });
         
