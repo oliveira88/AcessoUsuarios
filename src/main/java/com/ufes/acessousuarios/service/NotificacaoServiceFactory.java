@@ -8,18 +8,24 @@ public class NotificacaoServiceFactory {
     private final NotificacaoService service;
     private final INotificacaoDAO dao;
     
-    private NotificacaoServiceFactory(){
+    private NotificacaoServiceFactory(boolean obterNotificacao){
         dao = NotificacaoDaoFactory.getInstance().getNotificacaoDAO();
-        service = new NotificacaoService(dao);
+        service = new NotificacaoService(dao, obterNotificacao);
     }
     
-    public static NotificacaoServiceFactory getInstance(){
+    public static NotificacaoServiceFactory getInstance(boolean obterNotificacao){
         if (instancia == null) {
-            instancia = new NotificacaoServiceFactory();
+            instancia = new NotificacaoServiceFactory(obterNotificacao);
         }
         return instancia;
     }
 
+    public static NotificacaoServiceFactory getInstance(){
+        if (instancia == null) {
+            instancia = new NotificacaoServiceFactory(true);
+        }
+        return instancia;
+    }
     public NotificacaoService getService() {
         return service;
     }

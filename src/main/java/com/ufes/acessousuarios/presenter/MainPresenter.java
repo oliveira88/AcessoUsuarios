@@ -1,5 +1,6 @@
 package com.ufes.acessousuarios.presenter;
 
+import com.ufes.acessousuarios.model.Usuario;
 import com.ufes.acessousuarios.service.UsuarioService;
 import com.ufes.acessousuarios.service.UsuarioServiceFactory;
 import com.ufes.acessousuarios.state.main.MainPresenterState;
@@ -9,6 +10,7 @@ import java.awt.Component;
 import javax.swing.JOptionPane;
 import com.ufes.acessousuarios.observer.IObserver;
 import com.ufes.acessousuarios.service.NotificacaoServiceFactory;
+import com.ufes.acessousuarios.state.manterusuario.IncluirUsuarioState;
 
 public final class MainPresenter implements IObserver {
     private final MainView view;
@@ -29,6 +31,7 @@ public final class MainPresenter implements IObserver {
     
     private void initComponente(){
         if(this.usuarioService.getUsuarios().isEmpty()) {
+            JOptionPane.showMessageDialog(view, "Não há registros de administrador cadastrado, crie agora um!", "Primeiro Acesso!", JOptionPane.INFORMATION_MESSAGE);
             new ManterUsuarioPresenter(this);
         } else {
             new LoginPresenter(this);
@@ -84,6 +87,8 @@ public final class MainPresenter implements IObserver {
 
     @Override
     public void update() {
-        this.state.obterQuantidadeNotificacoes();
+        if(this.usuarioService.getUsuarioLogado() != null) {
+            this.state.obterQuantidadeNotificacoes();
+        }
     }
 }

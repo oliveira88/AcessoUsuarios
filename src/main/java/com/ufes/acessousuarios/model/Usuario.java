@@ -8,14 +8,16 @@ public class Usuario {
     private String senha;
     private String nome;
     private boolean admin;
+    private boolean ativo;
     private LocalDateTime dataCriacao;
 
-    public Usuario(long id, String login, String senha, String nome, boolean admin, LocalDateTime dataCriacao) {
+    public Usuario(long id, String login, String senha, String nome, boolean admin, boolean ativo, LocalDateTime dataCriacao) {
         this.id = id;
         this.login = login;
         this.senha = senha;
         this.nome = nome;
         this.admin = admin;
+        this.ativo = ativo;
         this.dataCriacao = dataCriacao;
     }
 
@@ -27,6 +29,14 @@ public class Usuario {
         this.dataCriacao = dataCriacao;
     }
     
+     public Usuario(String login, String senha, String nome, boolean admin, boolean ativo, LocalDateTime dataCriacao) {
+        this.login = login;
+        this.senha = senha;
+        this.nome = nome;
+        this.admin = admin;
+        this.ativo = ativo;
+        this.dataCriacao = dataCriacao;
+    }
     
     public long getId() {
         return id;
@@ -50,5 +60,9 @@ public class Usuario {
 
     public LocalDateTime getDataCriacao() {
         return dataCriacao;
+    }
+    
+    public boolean isAtivo() {
+        return ativo;
     }
 }

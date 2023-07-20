@@ -39,6 +39,12 @@ public class Notificacao extends NotificacaoUsuario {
         this.mensagem = mensagem;
     }
     
+    public Notificacao(String titulo, String mensagem, Boolean aprovacao) {
+        this.titulo = titulo;
+        this.mensagem = mensagem;
+        this.aprovacao = aprovacao;
+    }
+    
     public Notificacao(String titulo, String mensagem) {
         this.titulo = titulo;
         this.mensagem = mensagem;

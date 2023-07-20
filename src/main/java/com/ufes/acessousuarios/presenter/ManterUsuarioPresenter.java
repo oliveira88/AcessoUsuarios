@@ -82,4 +82,9 @@ public final class ManterUsuarioPresenter {
     public UsuarioService getUsuarioService() {
         return usuarioService;
     }
+
+    public MainPresenter getMainPresenter() {
+        return mainPresenter;
+    }
+    
 }

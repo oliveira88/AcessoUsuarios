@@ -1,5 +1,6 @@
 package com.ufes.acessousuarios.presenter;
 
+import com.ufes.acessousuarios.Util.AcessoException;
 import com.ufes.acessousuarios.model.Usuario;
 import com.ufes.acessousuarios.service.UsuarioService;
 import com.ufes.acessousuarios.service.UsuarioServiceFactory;
@@ -27,27 +28,35 @@ public class LoginPresenter {
             try{
                 this.entrar();
                 JOptionPane.showMessageDialog(view, "Login efetuado com sucesso!");
+            }catch(AcessoException ex){
+                JOptionPane.showMessageDialog(view, ex.getMessage());
             } catch(Exception ex){
                 JOptionPane.showMessageDialog(view, "Usuário não encontrado ou senha inválida!" + ex);
             }
         });
         this.view.getBtnCriar().addActionListener((e) -> {
-            
+            try {
+                this.criar();
+            } catch(Exception ex){
+                JOptionPane.showMessageDialog(view, "Usuário não encontrado ou senha inválida!" + ex);
+            }
         });
     }
     
     private void registerPane() {
         this.mainPresenter.addDesktopPane(view);
     }
-    
+    private void criar() {
+        new ManterUsuarioPresenter(mainPresenter);
+    }
     private void entrar() {
         String login = this.view.getTxtLogin().getText();
         String senha = new String(this.view.getTxtSenha().getPassword());
         var isDebug = java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().contains("-agentlib:jdwp");
-        if(isDebug) {
-            login = "admin";
-            senha = "Admin@";
-        }
+//        if(isDebug) {;
+//            login = "admin";
+//            senha = "Admin@";
+//        }
         Usuario user = usuarioService.realizarLogin(login, senha);
         usuarioService.setUsuarioLogado(user);
         mainPresenter.setState(new LogadoState(mainPresenter));

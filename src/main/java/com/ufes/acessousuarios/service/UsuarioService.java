@@ -1,6 +1,7 @@
 
 package com.ufes.acessousuarios.service;
 
+import com.ufes.acessousuarios.Util.AcessoException;
 import com.ufes.acessousuarios.dao.IUsuarioDAO;
 import com.ufes.acessousuarios.model.Usuario;
 import com.ufes.acessousuarios.observer.Observable;
@@ -23,15 +24,25 @@ public class UsuarioService extends Observable {
         this.usuarios = usuarioDAO.obterTodos();
         notifyObservers();
     }
-    
-    public Usuario realizarLogin(String login, String senha) {
+    public List<Usuario> obterTodosUsuarios() {
+        return usuarioDAO.obterTodos();
+    }
+        
+    public Usuario realizarLogin(String login, String senha) throws AcessoException {
         return usuarioDAO.login(login, senha);
     }
     
-    public void criarUsuario(Usuario usuario) throws SQLException {
+    public void criarUsuario(Usuario usuario, boolean admin) throws SQLException {
         usuarioDAO.criar(usuario);
+        if(!admin) {
+            var todosUsuarios = obterTodosUsuarios();
+            var ultimoUsuario = todosUsuarios.get(todosUsuarios.size() - 1);
+             NotificacaoServiceFactory.getInstance(false).getService().enviarPedidoAcesso(ultimoUsuario);
+        }
         initUsuarios();
     }
+    
+    
     
     public void excluir(Usuario usuario) {
         usuarioDAO.deletar(usuario.getId());
@@ -62,4 +73,13 @@ public class UsuarioService extends Observable {
         initUsuarios();
     }
     
+    public void autorizar(Usuario usuario) {
+        this.usuarioDAO.autorizarUsuario(usuario.getId());
+        initUsuarios();
+    }
+    
+    public void recusar(Usuario usuario) {
+        this.usuarioDAO.recusarUsuario(usuario.getId());
+        initUsuarios();
+    }
 }

@@ -142,8 +142,9 @@ public class NotificacaoDAO implements INotificacaoDAO {
                 .concat("\n            mensagem,")
                 .concat("\n            destinatario_id,")
                 .concat("\n            remetente_id,")
+                .concat("\n            aprovacao,")
                 .concat("\n            data_envio)")
-                .concat("\n VALUES(?,?,?,?,?);");
+                .concat("\n VALUES(?,?,?,?,?,?);");
         try {
             con = SQLite.getConnection();
             ps = con.prepareStatement(sql);
@@ -152,7 +153,8 @@ public class NotificacaoDAO implements INotificacaoDAO {
 
             ps.setLong(3, destinatario.getId());
             ps.setLong(4, remetente.getId());
-            ps.setDate(5, Date.valueOf(LocalDate.now()));
+            ps.setBoolean(5, notificacao.getAprovacao());
+            ps.setDate(6, Date.valueOf(LocalDate.now()));
             ps.executeUpdate();
             ps.close(); 
         } catch (SQLException ex) {
@@ -194,7 +196,8 @@ public class NotificacaoDAO implements INotificacaoDAO {
         ResultSet rs = null;
         List<Notificacao> notificacoes = new ArrayList<>();
         var sql = "SELECT * FROM Notificacao "
-                + "WHERE remetente_id = ? ";
+                + "WHERE remetente_id = ? "
+                + "AND   aprovacao IS NOT TRUE ";
 
         try {
             con = SQLite.getConnection();

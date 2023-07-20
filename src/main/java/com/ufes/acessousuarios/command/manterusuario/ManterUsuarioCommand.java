@@ -7,11 +7,11 @@ import com.ufes.acessousuarios.service.UsuarioServiceFactory;
 
 public abstract class ManterUsuarioCommand implements ICommand {
     protected Usuario usuario;
-    protected UsuarioService service;
+    protected UsuarioService usuarioService;
 
     public ManterUsuarioCommand(Usuario usuario) {
         this.usuario = usuario;
-        this.service = UsuarioServiceFactory.getInstance().getService();
+        this.usuarioService = UsuarioServiceFactory.getInstance().getService();
     }
     
     public abstract void executar();

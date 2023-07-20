@@ -1,5 +1,6 @@
 package com.ufes.acessousuarios.dao;
 
+import com.ufes.acessousuarios.Util.AcessoException;
 import com.ufes.acessousuarios.connection.SQLite;
 import com.ufes.acessousuarios.model.Usuario;
 import java.sql.Connection;
@@ -43,11 +44,11 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public Usuario login(String login, String senha) throws RuntimeException {
+    public Usuario login(String login, String senha) throws RuntimeException, AcessoException {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        var sql = "SELECT id, nome, admin, data_criacao FROM Usuario "
+        var sql = "SELECT id, nome, admin, ativo, data_criacao FROM Usuario "
                 + "WHERE login = ? "
                 + "AND senha = ?;";
         try {
@@ -62,8 +63,12 @@ public class UsuarioDAO implements IUsuarioDAO {
             long id = rs.getLong(1);
             String nome = rs.getString(2);
             boolean isAdmin = rs.getBoolean(3);
-            LocalDateTime dataCriacao = rs.getTimestamp(4).toLocalDateTime();
-            return new Usuario(id, login, senha, nome, isAdmin, dataCriacao);
+            boolean isAtivo = rs.getBoolean(4);
+            if(!isAtivo) {
+                throw new AcessoException("Aguardando aprovação dos administradores");
+            }
+            LocalDateTime dataCriacao = rs.getTimestamp(5).toLocalDateTime();
+            return new Usuario(id, login, senha, nome, isAdmin, isAtivo, dataCriacao);
         } catch (SQLException ex) {
             throw new RuntimeException("Erro ao buscar usuário.\n"+ ex.getMessage());
         } finally {
@@ -95,8 +100,8 @@ public class UsuarioDAO implements IUsuarioDAO {
     public void criar(Usuario usuario) throws SQLException {
         Connection con = null;
         PreparedStatement ps = null;
-        var sql = "INSERT INTO Usuario(nome, login, senha, admin, data_criacao)"
-                + "VALUES (?, ? ,? , ?, ?);";
+        var sql = "INSERT INTO Usuario(nome, login, senha, admin, ativo, data_criacao)"
+                + "VALUES (?, ? ,? , ?, ?, ?);";
         try {
             con = SQLite.getConnection();
             ps = con.prepareStatement(sql);
@@ -104,7 +109,8 @@ public class UsuarioDAO implements IUsuarioDAO {
             ps.setString(2, usuario.getLogin());
             ps.setString(3, usuario.getSenha());
             ps.setBoolean(4, usuario.isAdmin());
-            ps.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
+            ps.setBoolean(5, usuario.isAtivo());
+            ps.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
             ps.executeUpdate();
             ps.close();
         } catch (SQLException ex) {
@@ -139,7 +145,8 @@ public class UsuarioDAO implements IUsuarioDAO {
                 + "SET login = ?,"
                 + " senha = ?,"
                 + " nome = ?,"
-                + " admin = ?"
+                + " admin = ?,"
+                + " ativo = ? "
                 + "WHERE id = ?";
        try {
             con = SQLite.getConnection();
@@ -148,7 +155,8 @@ public class UsuarioDAO implements IUsuarioDAO {
             ps.setString(2, usuario.getSenha());
             ps.setString(3, usuario.getNome());
             ps.setBoolean(4, usuario.isAdmin());
-            ps.setLong(5, usuario.getId());
+            ps.setBoolean(5, usuario.isAtivo());
+            ps.setLong(6, usuario.getId());
             ps.executeUpdate();
        } catch (SQLException ex) {
            throw new RuntimeException("Erro ao atualizar usuário.\n" + ex.getMessage());
@@ -177,8 +185,9 @@ public class UsuarioDAO implements IUsuarioDAO {
             String login = rs.getString(4);
             String senha = rs.getString(2);
             boolean isAdmin = rs.getBoolean(5);
-            LocalDateTime dataCriacao = rs.getTimestamp(6).toLocalDateTime();
-            return new Usuario(id_result, nome, login, senha, isAdmin, dataCriacao);
+            boolean isAtivo = rs.getBoolean(6);
+            LocalDateTime dataCriacao = rs.getTimestamp(7).toLocalDateTime();
+            return new Usuario(id_result, nome, login, senha, isAdmin, isAtivo, dataCriacao);
        } catch (SQLException ex) {
             throw new RuntimeException("Erro ao obter usuário.\n" + ex.getMessage());
        } finally {
@@ -208,9 +217,9 @@ public class UsuarioDAO implements IUsuarioDAO {
                 String login = rs.getString(3);
                 String senha = rs.getString(4);
                 boolean isAdmin = rs.getBoolean(5);
-                LocalDateTime dataCriacao = rs.getTimestamp(6).toLocalDateTime();
-                usuarios.add(new Usuario(id, nome_result, login, senha, isAdmin, dataCriacao));
-                System.out.println(new Usuario(id, nome_result, login, senha, isAdmin, dataCriacao));
+                boolean isAtivo = rs.getBoolean(6);
+                LocalDateTime dataCriacao = rs.getTimestamp(7).toLocalDateTime();
+                usuarios.add(new Usuario(id, nome_result, login, senha, isAdmin, isAtivo, dataCriacao));
             } while(rs.next());
             
             return usuarios;
@@ -239,8 +248,9 @@ public class UsuarioDAO implements IUsuarioDAO {
                 String login = rs.getString(4);
                 String senha = rs.getString(2);
                 boolean isAdmin = rs.getBoolean(5);
-                LocalDateTime dataCriacao = rs.getTimestamp(6).toLocalDateTime();
-                usuarios.add(new Usuario(id, nome_result, login, senha, isAdmin, dataCriacao));
+                boolean isAtivo = rs.getBoolean(6);
+                LocalDateTime dataCriacao = rs.getTimestamp(7).toLocalDateTime();
+                usuarios.add(new Usuario(id, nome_result, login, senha, isAdmin, isAtivo, dataCriacao));
             }
             
             return usuarios;
@@ -253,7 +263,38 @@ public class UsuarioDAO implements IUsuarioDAO {
 
     @Override
     public void autorizarUsuario(long id) throws RuntimeException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       Connection con = null;
+       PreparedStatement ps = null;
+        var sql = "UPDATE Usuario "
+                + "SET ativo = 1 WHERE id = ?";
+       try {
+            con = SQLite.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setLong(1, id);
+            ps.executeUpdate();
+       } catch (SQLException ex) {
+           throw new RuntimeException("Erro ao autorizar usuário.\n" + ex.getMessage());
+       } finally {
+           SQLite.closeConnection(con, ps);
+       }
+    }
+    
+    @Override
+    public void recusarUsuario(long id) throws RuntimeException {
+        Connection con = null;
+       PreparedStatement ps = null;
+        var sql = "UPDATE Usuario "
+                + "SET ativo = 0 WHERE id = ?";
+       try {
+            con = SQLite.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setLong(1, id);
+            ps.executeUpdate();
+       } catch (SQLException ex) {
+           throw new RuntimeException("Erro ao recusar usuário.\n" + ex.getMessage());
+       } finally {
+           SQLite.closeConnection(con, ps);
+       }
     }
     
     

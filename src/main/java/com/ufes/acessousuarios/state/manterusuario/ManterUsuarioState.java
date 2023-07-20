@@ -2,16 +2,20 @@ package com.ufes.acessousuarios.state.manterusuario;
 
 import com.ufes.acessousuarios.model.Usuario;
 import com.ufes.acessousuarios.presenter.ManterUsuarioPresenter;
+import com.ufes.acessousuarios.service.UsuarioService;
+import com.ufes.acessousuarios.service.UsuarioServiceFactory;
 import com.ufes.acessousuarios.view.ManterUsuarioView;
 
 public abstract class ManterUsuarioState {
     protected ManterUsuarioPresenter presenter;
     protected ManterUsuarioView view;
     protected Usuario usuario;
+    protected UsuarioService usuarioService;
 
     public ManterUsuarioState(ManterUsuarioPresenter presenter, Usuario usuario) {
         this.presenter = presenter;
         this.view = this.presenter.getView();
+        this.usuarioService = UsuarioServiceFactory.getInstance().getService();
         this.usuario = usuario;
         this.initComponents();
     }
@@ -38,6 +42,7 @@ public abstract class ManterUsuarioState {
         this.view.getBtnEditar().setEnabled(false);
         this.view.getBtnExcluir().setEnabled(false);
         this.view.getBtnFechar().setVisible(true);
+        this.view.getChkAdmin().setVisible(false);
         this.view.getChkAdmin().setEnabled(false);
         this.view.getLblDataCadastro().setVisible(false);
         this.view.getTxtNome().setEnabled(false);

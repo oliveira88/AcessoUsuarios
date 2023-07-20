@@ -9,6 +9,6 @@ public class EditarUsuarioCommand extends ManterUsuarioCommand {
 
     @Override
     public void executar() {
-        this.service.atualizar(usuario);
+        this.usuarioService.atualizar(usuario);
     }
 }

@@ -1,5 +1,7 @@
 package com.ufes.acessousuarios.state.manternotificacao;
 
+import com.ufes.acessousuarios.command.manternotificacao.AprovarUsuarioCommand;
+import com.ufes.acessousuarios.command.manternotificacao.RecusarUsuarioCommand;
 import com.ufes.acessousuarios.command.manternotificacao.VisualizarNotificacaoCommand;
 import com.ufes.acessousuarios.model.Notificacao;
 import com.ufes.acessousuarios.model.Usuario;
@@ -7,11 +9,14 @@ import com.ufes.acessousuarios.presenter.ManterNotificacaoPresenter;
 
 public class VisualizarNotificacaoState extends ManterNotificacaoState {
     private final Notificacao notificacao;
+    private final Usuario remetente;
+    private final Usuario destinatario;
+    
     public VisualizarNotificacaoState(ManterNotificacaoPresenter presenter, Notificacao notificacao) {
         super(presenter);
         this.notificacao = notificacao;
-        var remetente = this.usuarioService.getUsuario(notificacao.getRemetenteId());
-        var destinatario = this.usuarioService.getUsuario(notificacao.getDestinatarioId());
+        remetente = this.usuarioService.getUsuario(notificacao.getRemetenteId());
+        destinatario = this.usuarioService.getUsuario(notificacao.getDestinatarioId());
         this.view.getTxtRemetente().setText(remetente.getNome());
         this.view.getTxtDestinatario().setText(destinatario.getNome());
         this.view.getTxtTitulo().setText(notificacao.getTitulo());
@@ -29,12 +34,12 @@ public class VisualizarNotificacaoState extends ManterNotificacaoState {
 
     @Override
     public void aprovar() {
-        super.aprovar();
+        new AprovarUsuarioCommand(presenter, remetente).executar();
     }
 
     @Override
     public void recusar() {
-        super.recusar();
+        new RecusarUsuarioCommand(presenter, remetente).executar();
     }
 
     @Override

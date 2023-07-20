@@ -12,14 +12,15 @@ public class NotificacaoService extends Observable {
     private List<Notificacao> notificacoes;
     private final UsuarioService usuarioService;
     
-    public NotificacaoService(INotificacaoDAO dao) {
+    public NotificacaoService(INotificacaoDAO dao, boolean obterNotificacao) {
         this.notificacaoDAO = dao;
         this.usuarioService = UsuarioServiceFactory.getInstance().getService();
         this.notificacoes = new ArrayList<>();
-        this.obterNotificacoes();
+        if(obterNotificacao) {
+            this.obterNotificacoes();
+        }
     }
     
-  
     public List<Notificacao> obterNotificacoes() {
         this.notificacoes = notificacaoDAO.obterTodas(usuarioService.getUsuarioLogado());
         notifyObservers();
@@ -50,5 +51,13 @@ public class NotificacaoService extends Observable {
     public void lerNotificacao(Usuario usuario, Long idNotificacao) {
         this.notificacaoDAO.lerNotificacao(usuario, idNotificacao);
         obterNotificacoes();
+    }
+    
+    public void enviarPedidoAcesso(Usuario usuario) {
+        var notificacao = new Notificacao("Pedido de acesso", "Solicito acesso ao sistema.", true);
+        var administradores =  usuarioService.obterTodosUsuarios().stream().filter(Usuario::isAdmin).toArray(Usuario[]::new);
+        for(var admin : administradores) {
+            this.notificacaoDAO.enviar(notificacao, usuario, admin);
+        }
     }
 }

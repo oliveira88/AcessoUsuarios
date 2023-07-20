@@ -6,6 +6,7 @@ import com.ufes.acessousuarios.command.manterusuario.IncluirUsuarioCommand;
 import com.ufes.acessousuarios.model.Usuario;
 import com.ufes.acessousuarios.presenter.ManterUsuarioPresenter;
 import com.ufes.acessousuarios.service.UsuarioServiceFactory;
+import com.ufes.acessousuarios.state.main.LogadoState;
 import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 
@@ -14,6 +15,7 @@ public class IncluirUsuarioState extends ManterUsuarioState {
     
     public IncluirUsuarioState(ManterUsuarioPresenter presenter, Usuario usuario) {
         super(presenter, usuario);
+        
     }
     
     @Override
@@ -23,12 +25,19 @@ public class IncluirUsuarioState extends ManterUsuarioState {
         this.view.getTxtNome().setEnabled(true);
         this.view.getTxtSenha().setEnabled(true);
         this.view.getTxtLogin().setEnabled(true);
-        this.view.getChkAdmin().setEnabled(true);
         this.view.getBtnConfirmar().setEnabled(true);
-
+        this.view.getBtnFechar().setVisible(false);
+        
         this.view.getBtnCancelar().setVisible(false);
         this.view.getBtnEditar().setVisible(false);
         this.view.getBtnExcluir().setVisible(false);
+        this.view.getBtnFechar().setVisible(true);
+        
+        if(usuario != null){
+            this.view.getBtnFechar().setVisible(true);
+            this.view.getChkAdmin().setVisible(true);
+            this.view.getChkAdmin().setEnabled(true);
+        }
     }
      
     @Override
@@ -38,9 +47,7 @@ public class IncluirUsuarioState extends ManterUsuarioState {
       }
       this.usuario = this.lerFormulario();
       ValidadorSenha.validar(this.usuario.getSenha());
-      command = new IncluirUsuarioCommand(this.usuario);
-      this.command.executar();
-      JOptionPane.showMessageDialog(view, "Incluído com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+      new IncluirUsuarioCommand(this.usuario, presenter.getMainPresenter()).executar();
       fechar();
     }
     
@@ -49,7 +56,7 @@ public class IncluirUsuarioState extends ManterUsuarioState {
         String login = this.view.getTxtLogin().getText();
         String senha = new String(this.view.getTxtSenha().getPassword());
         String nome = this.view.getTxtNome().getText();
-        usuario = new Usuario(login, senha, nome, isAdmin, LocalDateTime.now());
+        usuario = new Usuario(login, senha, nome, isAdmin, isAdmin, LocalDateTime.now());
         return usuario;
     }
     

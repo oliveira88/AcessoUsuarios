@@ -9,7 +9,7 @@ public class ExcluirUsuarioCommand extends ManterUsuarioCommand {
 
     @Override
     public void executar() {
-        this.service.excluir(usuario);
+        this.usuarioService.excluir(usuario);
     }
 
 }
