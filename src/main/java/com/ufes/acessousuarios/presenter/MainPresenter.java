@@ -1,6 +1,5 @@
 package com.ufes.acessousuarios.presenter;
 
-import com.ufes.acessousuarios.model.Usuario;
 import com.ufes.acessousuarios.service.UsuarioService;
 import com.ufes.acessousuarios.service.UsuarioServiceFactory;
 import com.ufes.acessousuarios.state.main.MainPresenterState;
@@ -9,8 +8,6 @@ import com.ufes.acessousuarios.view.MainView;
 import java.awt.Component;
 import javax.swing.JOptionPane;
 import com.ufes.acessousuarios.observer.IObserver;
-import com.ufes.acessousuarios.service.NotificacaoServiceFactory;
-import com.ufes.acessousuarios.state.manterusuario.IncluirUsuarioState;
 
 public final class MainPresenter implements IObserver {
     private final MainView view;

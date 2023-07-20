@@ -38,7 +38,7 @@ public class LoginPresenter {
             try {
                 this.criar();
             } catch(Exception ex){
-                JOptionPane.showMessageDialog(view, "Usuário não encontrado ou senha inválida!" + ex);
+                JOptionPane.showMessageDialog(view, "Usuário não encontrado ou senha inválida!" + ex.getMessage());
             }
         });
     }
@@ -52,11 +52,6 @@ public class LoginPresenter {
     private void entrar() {
         String login = this.view.getTxtLogin().getText();
         String senha = new String(this.view.getTxtSenha().getPassword());
-        var isDebug = java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().contains("-agentlib:jdwp");
-//        if(isDebug) {;
-//            login = "admin";
-//            senha = "Admin@";
-//        }
         Usuario user = usuarioService.realizarLogin(login, senha);
         usuarioService.setUsuarioLogado(user);
         mainPresenter.setState(new LogadoState(mainPresenter));
