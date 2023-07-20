@@ -1,8 +1,11 @@
 package com.ufes.acessousuarios.presenter;
 
 import com.ufes.acessousuarios.Util.DateManipulation;
+import com.ufes.acessousuarios.model.Notificacao;
 import com.ufes.acessousuarios.model.Usuario;
 import com.ufes.acessousuarios.observer.IObserver;
+import com.ufes.acessousuarios.service.NotificacaoService;
+import com.ufes.acessousuarios.service.NotificacaoServiceFactory;
 import com.ufes.acessousuarios.service.UsuarioService;
 import com.ufes.acessousuarios.service.UsuarioServiceFactory;
 import com.ufes.acessousuarios.state.manternotificacao.EnviarNotificacaoState;
@@ -23,7 +26,7 @@ public class BuscarUsuariosPresenter implements IObserver {
     private final BuscarUsuariosView view;
     private final MainPresenter mainPresenter;
     private final UsuarioService usuarioService;
-    
+    private final NotificacaoService notificacaoService;
     private DefaultTableModel tableUsuario;
 
 
@@ -31,7 +34,9 @@ public class BuscarUsuariosPresenter implements IObserver {
         this.view = new BuscarUsuariosView();
         this.mainPresenter = mainPresenter;
         this.usuarioService = UsuarioServiceFactory.getInstance().getService();
-        
+        this.notificacaoService = NotificacaoServiceFactory.getInstance().getService();
+        this.usuarioService.addObserver(this);
+        this.notificacaoService.addObserver(this);
         this.constructTableModel();
         this.loadUsuarios();
         registerPane();
@@ -58,12 +63,19 @@ public class BuscarUsuariosPresenter implements IObserver {
     private void loadUsuarios() {
         clearTable();
         for (Usuario usuario : usuarioService.getUsuarios()) {
+            var notificacoes = notificacaoService.obterNotificacoesPorUsuario(usuario);
+            var enviadas = notificacaoService.obterNotificacoesEnviadas(usuario);
+            var notificacoesLidas = notificacoes.stream()
+                                                .map(Notificacao::getVisualizada)
+                                                .filter(Boolean::valueOf)
+                                                .count();
+            
             tableUsuario.addRow(new Object[]{
                 usuario.getId(),
                 usuario.getNome(),
                 DateManipulation.localDateToString(usuario.getDataCriacao()),
-                0,
-                0
+                enviadas.size(),
+                notificacoesLidas
             });
         }
     }
@@ -105,7 +117,7 @@ public class BuscarUsuariosPresenter implements IObserver {
             }
         });
     
-       view.getBtnVisaulizarUsuario().addActionListener((e) -> {
+        view.getBtnVisaulizarUsuario().addActionListener((e) -> {
            var manter = new ManterUsuarioPresenter(mainPresenter);
            try {
                if(getUsuarioSelected() != null){

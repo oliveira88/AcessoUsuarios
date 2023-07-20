@@ -1,28 +1,36 @@
 package com.ufes.acessousuarios.presenter;
 
+import com.ufes.acessousuarios.model.Notificacao;
+import com.ufes.acessousuarios.observer.IObserver;
 import com.ufes.acessousuarios.service.NotificacaoService;
 import com.ufes.acessousuarios.service.NotificacaoServiceFactory;
 import com.ufes.acessousuarios.service.UsuarioService;
 import com.ufes.acessousuarios.service.UsuarioServiceFactory;
+import com.ufes.acessousuarios.state.manternotificacao.ManterNotificacaoState;
+import com.ufes.acessousuarios.state.manternotificacao.VisualizarNotificacaoState;
 import com.ufes.acessousuarios.view.BuscarNotificacoesView;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-public class BuscarNotificacoesPresenter {
+public class BuscarNotificacoesPresenter implements IObserver  {
     private final BuscarNotificacoesView view;
     private final MainPresenter mainPresenter;
     private final UsuarioService usuarioService;
-    private NotificacaoService notificacaoService;
+    private final NotificacaoService notificacaoService;
     private final DefaultTableModel tableNotificacao;
-    
+
     public BuscarNotificacoesPresenter(MainPresenter mainPresenter) {
         this.view = new BuscarNotificacoesView();
         tableNotificacao = (DefaultTableModel) view.getTabelaNotificacao().getModel();
         this.mainPresenter = mainPresenter;
         this.usuarioService = UsuarioServiceFactory.getInstance().getService();
         this.notificacaoService = NotificacaoServiceFactory.getInstance().getService();
+        this.notificacaoService.addObserver(this);
         loadNotificacoes();
         registerPane();
+        configMenus();
         this.view.setVisible(true);
     }
     
@@ -32,11 +40,12 @@ public class BuscarNotificacoesPresenter {
     
     private void loadNotificacoes() {
         this.clearTable();
-            for(var notificacao : notificacaoService.obterNotificacoes()) {
+            for(var notificacao : notificacaoService.getNotificacoes()) {
+                var remetente = usuarioService.getUsuario(notificacao.getRemetenteId());
                 tableNotificacao.addRow(new Object[] {
                     notificacao.getTitulo(),
-                    "TODO!",
-                    false
+                    remetente.getNome(),
+                    notificacao.getVisualizada()
                 });
             }
         
@@ -48,5 +57,32 @@ public class BuscarNotificacoesPresenter {
                 tableNotificacao.removeRow(i);
             }
         }
+    }
+    
+    private void configMenus() {
+        this.view.getBtnFechar().addActionListener((e) -> {
+            view.dispose();
+        });
+        this.view.getBtnVisualizar().addActionListener((e) -> {
+            try {
+                var notificacao = getNotificacaoSelected();
+               if(notificacao != null){
+                    var manterNotificacao = new ManterNotificacaoPresenter(mainPresenter, notificacao);
+                    manterNotificacao.getState().visualizar();
+               }
+           } catch (Exception ex) {
+               Logger.getLogger(BuscarUsuariosPresenter.class.getName()).log(Level.SEVERE, null, ex);
+           }
+        });
+    }
+    
+    private Notificacao getNotificacaoSelected() throws Exception {
+        int rowIndex = view.getTabelaNotificacao().getSelectedRow();
+        return notificacaoService.obterNotificacoes().get(rowIndex);
+    }
+
+    @Override
+    public void update() {
+        this.loadNotificacoes();
     }
 }

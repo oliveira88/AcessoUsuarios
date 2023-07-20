@@ -1,5 +1,7 @@
 package com.ufes.acessousuarios.presenter;
 
+import com.ufes.acessousuarios.service.NotificacaoService;
+import com.ufes.acessousuarios.service.NotificacaoServiceFactory;
 import com.ufes.acessousuarios.service.UsuarioService;
 import com.ufes.acessousuarios.service.UsuarioServiceFactory;
 import com.ufes.acessousuarios.state.manterusuario.IncluirUsuarioState;
@@ -50,6 +52,13 @@ public final class ManterUsuarioPresenter {
                 this.state.fechar();
             } catch(Exception ex) {
                 JOptionPane.showMessageDialog(view, "Erro ao fechar " + ex, "Erro!", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        this.view.getBtnExcluir().addActionListener((e) -> {
+            try {
+                this.state.excluir();
+            } catch(Exception ex) {
+                JOptionPane.showMessageDialog(view, "Erro ao excluir " + ex, "Erro!", JOptionPane.ERROR_MESSAGE);
             }
         });
     }

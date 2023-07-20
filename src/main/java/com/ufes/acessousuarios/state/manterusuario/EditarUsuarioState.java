@@ -61,16 +61,21 @@ public class EditarUsuarioState extends ManterUsuarioState {
     }
     
     @Override
-    public void editar() {
+    public void salvar() {
       if(!validarCampos()){
-         JOptionPane.showMessageDialog(view, "Informe todo os campos para realizar o cadastro", "Atenção!",JOptionPane.INFORMATION_MESSAGE);   
+         JOptionPane.showMessageDialog(view, "Informe todo os campos para realizar o cadastro", "Atenção!",JOptionPane.INFORMATION_MESSAGE);
+         return;
       }
       this.usuario = this.lerFormulario();
       ValidadorSenha.validar(this.usuario.getSenha());
       command = new EditarUsuarioCommand(this.usuario);
       this.command.executar();
+      JOptionPane.showMessageDialog(view, "Salvo com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+      fechar();
     }
-
+    
+    
+    
     @Override
     public void cancelar() {
         presenter.setState(new VisualizarUsuarioState(presenter, usuario));

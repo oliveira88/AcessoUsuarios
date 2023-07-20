@@ -40,6 +40,8 @@ public class IncluirUsuarioState extends ManterUsuarioState {
       ValidadorSenha.validar(this.usuario.getSenha());
       command = new IncluirUsuarioCommand(this.usuario);
       this.command.executar();
+      JOptionPane.showMessageDialog(view, "Incluído com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+      fechar();
     }
     
     public Usuario lerFormulario() {

@@ -32,6 +32,9 @@ public abstract class MainPresenterState {
     public void buscarNotificacoes() {
         throw new RuntimeException("Não é possível executar a busca de notificações.");
     }
+    public void obterQuantidadeNotificacoes() {
+        throw new RuntimeException("Não é possível obter a quantidade de notificações notificações.");
+    }
 
     public void initComponentes() {
         this.view.getjLabelTipo().setVisible(false);

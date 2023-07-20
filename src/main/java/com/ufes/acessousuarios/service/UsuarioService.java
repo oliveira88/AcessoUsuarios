@@ -21,6 +21,7 @@ public class UsuarioService extends Observable {
     
     private void initUsuarios() {
         this.usuarios = usuarioDAO.obterTodos();
+        notifyObservers();
     }
     
     public Usuario realizarLogin(String login, String senha) {
@@ -28,9 +29,15 @@ public class UsuarioService extends Observable {
     }
     
     public void criarUsuario(Usuario usuario) throws SQLException {
-            usuarioDAO.criar(usuario);
+        usuarioDAO.criar(usuario);
+        initUsuarios();
     }
-
+    
+    public void excluir(Usuario usuario) {
+        usuarioDAO.deletar(usuario.getId());
+        initUsuarios();
+    }
+    
     public List<Usuario> getUsuarios() {
         return usuarios;
     } 
@@ -52,6 +59,7 @@ public class UsuarioService extends Observable {
     
     public void atualizar(Usuario usuario) throws RuntimeException{
         this.usuarioDAO.atualizar(usuario);
+        initUsuarios();
     }
     
 }

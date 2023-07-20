@@ -16,9 +16,10 @@ public class EnviarNotificacaoState extends ManterNotificacaoState {
     public void enviar() {
         new EnviarNotificacaoCommand(presenter, destinatario).executar();
     }
-    
+
      @Override
     protected void initComponents() {
+        super.initComponents();
         this.view.setTitle("Enviar Notificação");
         this.view.getTxtRemetente().setEnabled(false);
         this.view.getTxtDestinatario().setEditable(false);

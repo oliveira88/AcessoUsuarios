@@ -1,5 +1,6 @@
 package com.ufes.acessousuarios.state.main;
 
+import com.ufes.acessousuarios.command.manternotificacao.ObterQuantidadeNotificacoesCommand;
 import com.ufes.acessousuarios.presenter.BuscarNotificacoesPresenter;
 import com.ufes.acessousuarios.presenter.BuscarUsuariosPresenter;
 import com.ufes.acessousuarios.presenter.LoginPresenter;
@@ -11,10 +12,12 @@ import com.ufes.acessousuarios.service.UsuarioServiceFactory;
 public class LogadoState extends MainPresenterState {
     public LogadoState(MainPresenter mainPresenter) {
         super(mainPresenter);
+        registerObserver();
     }
     
     @Override
     public void initComponentes() {
+        super.initComponentes();
         boolean isAdmin = UsuarioServiceFactory.getInstance().getService().getUsuarioLogado().isAdmin();
         if(isAdmin) {
             this.view.setTitle("Admin");
@@ -32,6 +35,11 @@ public class LogadoState extends MainPresenterState {
         this.view.getTipoUsuario().setVisible(true);
         this.view.getBtnNotificacoes().setVisible(true);
         this.view.getNameUsuario().setText(UsuarioServiceFactory.getInstance().getService().getUsuarioLogado().getNome());
+        this.view.getBtnNotificacoes().setText("Notificações: " + NotificacaoServiceFactory.getInstance().getService().obterNotificacoes().size());
+    }
+    
+    private void registerObserver() {
+        NotificacaoServiceFactory.getInstance().getService().addObserver(presenter);
     }
 
     @Override
@@ -46,11 +54,12 @@ public class LogadoState extends MainPresenterState {
 
     @Override
     public void buscarNotificacoes() {
-        if(!NotificacaoServiceFactory.getInstance().getService().obterNotificacoes().isEmpty()) {
-            new BuscarNotificacoesPresenter(presenter);
-        } else {
-            throw new RuntimeException("Você não possui notificações.");
-        }
+        new BuscarNotificacoesPresenter(presenter);
+    }
+
+    @Override
+    public void obterQuantidadeNotificacoes() {
+        new ObterQuantidadeNotificacoesCommand(presenter).executar();
     }
     
     @Override
@@ -60,6 +69,7 @@ public class LogadoState extends MainPresenterState {
         new LoginPresenter(presenter);
     }
 
+    
     public void configurarLog() {
         throw new RuntimeException("Não é possível a configuração de log.");
     }

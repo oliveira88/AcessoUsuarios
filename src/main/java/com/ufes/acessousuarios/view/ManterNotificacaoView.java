@@ -42,6 +42,8 @@ public class ManterNotificacaoView extends javax.swing.JInternalFrame {
         lblDestinatario = new javax.swing.JLabel();
         txtRemetente = new javax.swing.JTextField();
         txtDestinatario = new javax.swing.JTextField();
+        btnAprovar = new javax.swing.JButton();
+        btnRecusar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -61,6 +63,10 @@ public class ManterNotificacaoView extends javax.swing.JInternalFrame {
 
         lblDestinatario.setText("Destinatário");
 
+        btnAprovar.setText("Aprovar");
+
+        btnRecusar.setText("Recusar");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -69,6 +75,10 @@ public class ManterNotificacaoView extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnRecusar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAprovar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnFechar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEnviar))
@@ -109,7 +119,9 @@ public class ManterNotificacaoView extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnFechar)
-                    .addComponent(btnEnviar))
+                    .addComponent(btnEnviar)
+                    .addComponent(btnAprovar)
+                    .addComponent(btnRecusar))
                 .addContainerGap())
         );
 
@@ -160,9 +172,20 @@ public class ManterNotificacaoView extends javax.swing.JInternalFrame {
         return txtTitulo;
     }
 
+    public JButton getBtnAprovar() {
+        return btnAprovar;
+    }
+
+    public JButton getBtnRecusar() {
+        return btnRecusar;
+    }
+
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAprovar;
     private javax.swing.JButton btnEnviar;
     private javax.swing.JButton btnFechar;
+    private javax.swing.JButton btnRecusar;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblDestinatario;
     private javax.swing.JLabel lblMensagem;

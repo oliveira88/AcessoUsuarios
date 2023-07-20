@@ -2,13 +2,14 @@ package com.ufes.acessousuarios.command.manterusuario;
 
 import com.ufes.acessousuarios.model.Usuario;
 
-public class EditarUsuarioCommand extends ManterUsuarioCommand {
-    public EditarUsuarioCommand(Usuario usuario) {
+public class ExcluirUsuarioCommand extends ManterUsuarioCommand {
+    public ExcluirUsuarioCommand(Usuario usuario) {
         super(usuario);
     }
 
     @Override
     public void executar() {
-        this.service.atualizar(usuario);
+        this.service.excluir(usuario);
     }
+
 }

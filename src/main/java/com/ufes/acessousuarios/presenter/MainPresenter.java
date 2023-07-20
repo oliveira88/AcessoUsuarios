@@ -1,21 +1,14 @@
 package com.ufes.acessousuarios.presenter;
 
-import com.ufes.acessousuarios.model.Usuario;
 import com.ufes.acessousuarios.service.UsuarioService;
 import com.ufes.acessousuarios.service.UsuarioServiceFactory;
 import com.ufes.acessousuarios.state.main.MainPresenterState;
 import com.ufes.acessousuarios.state.main.NaoLogadoState;
-import com.ufes.acessousuarios.state.manterusuario.EditarSenhaUsuarioState;
-import com.ufes.acessousuarios.state.manterusuario.EditarUsuarioState;
-import com.ufes.acessousuarios.state.manterusuario.IncluirUsuarioState;
-import com.ufes.acessousuarios.state.manterusuario.VisualizarUsuarioState;
 import com.ufes.acessousuarios.view.MainView;
 import java.awt.Component;
 import javax.swing.JOptionPane;
 import com.ufes.acessousuarios.observer.IObserver;
-import com.ufes.acessousuarios.service.NotificacaoService;
 import com.ufes.acessousuarios.service.NotificacaoServiceFactory;
-import javax.swing.JInternalFrame;
 
 public final class MainPresenter implements IObserver {
     private final MainView view;
@@ -62,20 +55,15 @@ public final class MainPresenter implements IObserver {
             showDialog("Deslogar");
         });
         this.view.getBtnNotificacoes().addActionListener((e) -> {
-            try {
-                this.state.buscarNotificacoes();
-            } catch(RuntimeException ex) {
-                JOptionPane.showMessageDialog(view, ex.getMessage(), "Notificações", JOptionPane.INFORMATION_MESSAGE);
-            }
+            this.state.buscarNotificacoes();
         });
         
     }
     
     public void fecharTodasJanelas(){
-        for(JInternalFrame frame : view.getDesktopPane().getAllFrames()) {
+        for(var frame : view.getDesktopPane().getAllFrames()) {
             frame.dispose();
         }
-        view.getDesktopPane().removeAll();
     }
     
     private void showDialog(String message) {
@@ -96,6 +84,6 @@ public final class MainPresenter implements IObserver {
 
     @Override
     public void update() {
-        this.state.buscarNotificacoes();
+        this.state.obterQuantidadeNotificacoes();
     }
 }

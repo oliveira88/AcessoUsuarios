@@ -26,12 +26,17 @@ public abstract class ManterNotificacaoState {
     public void recusar() {
         throw new RuntimeException("Não é possível executar recusar.");
     }
+    public void visualizar() {
+        throw new RuntimeException("Não é possível executar visualizar.");
+    }
     public void fechar() {
         this.view.dispose();
     }
     
     protected void initComponents() {
         this.view.getTxtRemetente().setEnabled(false);
-        this.view.getTxtDestinatario().setEditable(false);
+        this.view.getTxtDestinatario().setEnabled(false);
+        this.view.getBtnAprovar().setVisible(false);        
+        this.view.getBtnRecusar().setVisible(false);        
     }
 }

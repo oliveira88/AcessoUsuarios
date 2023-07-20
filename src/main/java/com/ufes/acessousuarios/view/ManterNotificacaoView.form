@@ -26,6 +26,10 @@
               <Group type="103" groupAlignment="1" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace max="32767" attributes="0"/>
+                      <Component id="btnRecusar" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="btnAprovar" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnFechar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnEnviar" min="-2" max="-2" attributes="0"/>
@@ -78,6 +82,8 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnFechar" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnEnviar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnAprovar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnRecusar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -135,6 +141,16 @@
     <Component class="javax.swing.JTextField" name="txtRemetente">
     </Component>
     <Component class="javax.swing.JTextField" name="txtDestinatario">
+    </Component>
+    <Component class="javax.swing.JButton" name="btnAprovar">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Aprovar"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnRecusar">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Recusar"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>
